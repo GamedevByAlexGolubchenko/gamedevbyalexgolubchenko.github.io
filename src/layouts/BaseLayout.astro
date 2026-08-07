@@ -23,7 +23,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
 		<link rel="canonical" href={canonicalURL} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:title" content={title} data-i18n-content={`meta.${page}Title`} />
