@@ -1,0 +1,14 @@
+---
+import { profile } from '../data/site';
+---
+
+<footer class="site-footer">
+	<div>
+		<p class="footer-name">{profile.name}</p>
+		<p class="footer-line" data-i18n="common.footerLine">Unity development, engineered with care.</p>
+	</div>
+	<div class="footer-meta">
+		<a href={profile.github} target="_blank" rel="noreferrer" data-i18n="common.github">GitHub profile</a>
+		<p>© {new Date().getFullYear()} <span data-i18n="common.copyright">Alex Golubchenko</span></p>
+	</div>
+</footer>

@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile, translations } from '../data/site';
+
+const en = translations.en;
+---
+
+<BaseLayout page="support" title={en.meta.supportTitle} description={en.meta.supportDescription}>
+	<section class="support-hero">
+		<div class="support-hero-main">
+			<p class="eyebrow" data-i18n="support.eyebrow">{en.support.eyebrow}</p>
+			<h1 data-i18n="support.title">{en.support.title}</h1>
+			<p class="hero-intro" data-i18n="support.intro">{en.support.intro}</p>
+		</div>
+		<aside class="support-aside">
+			<span class="meta-chip" data-i18n="common.draft">{en.common.draft}</span>
+			<p data-i18n="common.draftText">{en.common.draftText}</p>
+		</aside>
+	</section>
+
+	<aside class="warning-panel">
+		<h2 data-i18n="support.noticeTitle">{en.support.noticeTitle}</h2>
+		<p data-i18n="support.noticeBody">{en.support.noticeBody}</p>
+	</aside>
+
+	<section class="content-section" aria-labelledby="process-title">
+		<div class="section-heading">
+			<p class="section-label" data-i18n="support.processLabel">{en.support.processLabel}</p>
+			<h2 class="section-title" id="process-title" data-i18n="support.processTitle">{en.support.processTitle}</h2>
+		</div>
+		<div class="process-grid">
+			<article class="process-item">
+				<h3 data-i18n="support.stepOneTitle">{en.support.stepOneTitle}</h3>
+				<p data-i18n="support.stepOneBody">{en.support.stepOneBody}</p>
+			</article>
+			<article class="process-item">
+				<h3 data-i18n="support.stepTwoTitle">{en.support.stepTwoTitle}</h3>
+				<p data-i18n="support.stepTwoBody">{en.support.stepTwoBody}</p>
+			</article>
+			<article class="process-item">
+				<h3 data-i18n="support.stepThreeTitle">{en.support.stepThreeTitle}</h3>
+				<p data-i18n="support.stepThreeBody">{en.support.stepThreeBody}</p>
+			</article>
+		</div>
+	</section>
+
+	<section class="content-section" aria-labelledby="scope-title">
+		<div class="section-heading">
+			<p class="section-label" data-i18n="support.scopeLabel">{en.support.scopeLabel}</p>
+			<div>
+				<h2 class="section-title" id="scope-title" data-i18n="support.scopeTitle">{en.support.scopeTitle}</h2>
+				<ul class="scope-list" data-i18n-list="support.scopeItems">
+					{en.support.scopeItems.map((item) => <li data-list-item>{item}</li>)}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section class="support-callout" aria-labelledby="contact-title">
+		<div>
+			<p class="section-label" data-i18n="support.contactLabel">{en.support.contactLabel}</p>
+			<h2 id="contact-title" data-i18n="support.contactTitle">{en.support.contactTitle}</h2>
+			<p data-i18n="support.contactBody">{en.support.contactBody}</p>
+		</div>
+		<a class="button-link" href={profile.github} target="_blank" rel="noreferrer" data-i18n="support.contactCta">
+			{en.support.contactCta}
+		</a>
+	</section>
+</BaseLayout>

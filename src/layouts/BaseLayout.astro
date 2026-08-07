@@ -1,0 +1,98 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { translations, type PageName } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+	page: PageName;
+	title: string;
+	description: string;
+}
+
+const { page, title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#f2f0e9" />
+		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
+		<link rel="canonical" href={canonicalURL} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} data-i18n-content={`meta.${page}Title`} />
+		<meta property="og:description" content={description} data-i18n-content={`meta.${page}Description`} />
+		<meta property="og:site_name" content="Alex Golubchenko" />
+		<meta name="twitter:card" content="summary" />
+		<title data-i18n={`meta.${page}Title`}>{title}</title>
+	</head>
+	<body data-page={page}>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<div class="page-shell">
+			<SiteHeader page={page} />
+			<main id="main"><slot /></main>
+			<SiteFooter />
+		</div>
+
+		<script id="i18n-data" type="application/json" set:html={JSON.stringify(translations)}></script>
+		<script>
+			const storageKey = 'alex-site-locale';
+			const dataNode = document.querySelector('#i18n-data');
+			const dictionaries = dataNode ? JSON.parse(dataNode.textContent || '{}') : {};
+			const getValue = (source, path) => path.split('.').reduce((value, key) => value?.[key], source);
+
+			const applyLocale = (locale) => {
+				const dictionary = dictionaries[locale] || dictionaries.en;
+				document.documentElement.lang = locale;
+
+				document.querySelectorAll('[data-i18n]').forEach((element) => {
+					const value = getValue(dictionary, element.dataset.i18n);
+					if (typeof value === 'string') element.textContent = value;
+				});
+
+				document.querySelectorAll('[data-i18n-content]').forEach((element) => {
+					const value = getValue(dictionary, element.dataset.i18nContent);
+					if (typeof value === 'string') element.setAttribute('content', value);
+				});
+
+				document.querySelectorAll('[data-i18n-list]').forEach((list) => {
+					const values = getValue(dictionary, list.dataset.i18nList);
+					if (!Array.isArray(values)) return;
+					list.querySelectorAll('[data-list-item]').forEach((item, index) => {
+						if (typeof values[index] === 'string') item.textContent = values[index];
+					});
+				});
+
+				document.querySelectorAll('[data-locale-option]').forEach((option) => {
+					option.classList.toggle('active', option.dataset.localeOption === locale);
+				});
+
+				const toggle = document.querySelector('[data-language-toggle]');
+				if (toggle) {
+					toggle.setAttribute('aria-label', dictionary.nav.language);
+					toggle.dataset.locale = locale;
+				}
+
+				const page = document.body.dataset.page;
+				const localizedTitle = getValue(dictionary, `meta.${page}Title`);
+				if (typeof localizedTitle === 'string') document.title = localizedTitle;
+			};
+
+			const initialLocale = localStorage.getItem(storageKey) === 'ru' ? 'ru' : 'en';
+			applyLocale(initialLocale);
+
+			document.querySelector('[data-language-toggle]')?.addEventListener('click', (event) => {
+				const button = event.currentTarget;
+				const nextLocale = button.dataset.locale === 'en' ? 'ru' : 'en';
+				localStorage.setItem(storageKey, nextLocale);
+				applyLocale(nextLocale);
+			});
+		</script>
+	</body>
+</html>

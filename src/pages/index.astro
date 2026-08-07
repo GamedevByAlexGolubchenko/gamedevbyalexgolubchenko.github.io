@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile, projects, translations } from '../data/site';
+
+const en = translations.en;
+---
+
+<BaseLayout page="home" title={en.meta.homeTitle} description={en.meta.homeDescription}>
+	<section class="hero">
+		<div class="hero-main">
+			<p class="eyebrow" data-i18n="home.eyebrow">{en.home.eyebrow}</p>
+			<h1 data-i18n="home.title">{en.home.title}</h1>
+			<p class="hero-intro" data-i18n="home.intro">{en.home.intro}</p>
+			<div class="action-row">
+				<a class="button-link" href="#work" data-i18n="home.primaryCta">{en.home.primaryCta}</a>
+				<a class="button-link secondary" href="/support/" data-i18n="home.secondaryCta">{en.home.secondaryCta}</a>
+			</div>
+		</div>
+		<aside class="hero-index" aria-label="Profile summary">
+			<p class="availability" data-i18n="common.status">{en.common.status}</p>
+			<div class="index-copy">
+				<p class="index-label" data-i18n="home.indexLabel">{en.home.indexLabel}</p>
+				<p class="index-value" data-i18n="home.indexValue">{en.home.indexValue}</p>
+			</div>
+		</aside>
+	</section>
+
+	<aside class="draft-banner">
+		<strong data-i18n="common.draft">{en.common.draft}</strong>
+		<p data-i18n="common.draftText">{en.common.draftText}</p>
+	</aside>
+
+	<section class="content-section" aria-labelledby="about-title">
+		<div class="section-heading">
+			<p class="section-label" data-i18n="home.aboutLabel">{en.home.aboutLabel}</p>
+			<div>
+				<h2 class="section-title" id="about-title" data-i18n="home.aboutTitle">{en.home.aboutTitle}</h2>
+				<p class="section-copy" data-i18n="home.aboutBody">{en.home.aboutBody}</p>
+			</div>
+		</div>
+		<ul class="skills-list" aria-label={en.home.skillsLabel}>
+			{profile.skills.map((skill) => <li>{skill}</li>)}
+		</ul>
+	</section>
+
+	<section class="content-section" id="work" aria-labelledby="work-title">
+		<div class="section-heading">
+			<p class="section-label" data-i18n="home.workLabel">{en.home.workLabel}</p>
+			<div>
+				<h2 class="section-title" id="work-title" data-i18n="home.workTitle">{en.home.workTitle}</h2>
+				<p class="section-copy" data-i18n="home.workIntro">{en.home.workIntro}</p>
+			</div>
+		</div>
+
+		<div class="projects-grid">
+			{projects.map((project) => (
+				<article class="project-card">
+					<div class="project-topline">
+						<span class="project-number">{project.number}</span>
+						<span class="project-status" data-i18n="home.projectStatus">{en.home.projectStatus}</span>
+					</div>
+					<h3 data-i18n="home.projectTitle">{en.home.projectTitle}</h3>
+					<p data-i18n="home.projectBody">{en.home.projectBody}</p>
+					<p class="project-meta" data-i18n="home.projectMeta">{en.home.projectMeta}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="support-callout" aria-labelledby="support-title">
+		<div>
+			<p class="section-label" data-i18n="home.supportLabel">{en.home.supportLabel}</p>
+			<h2 id="support-title" data-i18n="home.supportTitle">{en.home.supportTitle}</h2>
+			<p data-i18n="home.supportBody">{en.home.supportBody}</p>
+		</div>
+		<a class="button-link" href="/support/" data-i18n="home.supportCta">{en.home.supportCta}</a>
+	</section>
+</BaseLayout>
