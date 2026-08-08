@@ -13,15 +13,21 @@ const en = translations.en;
 			<p class="hero-intro" data-i18n="support.intro">{en.support.intro}</p>
 		</div>
 		<aside class="support-aside">
-			<span class="meta-chip" data-i18n="common.draft">{en.common.draft}</span>
-			<p data-i18n="common.draftText">{en.common.draftText}</p>
+			<span class="meta-chip" data-i18n="support.availabilityLabel">{en.support.availabilityLabel}</span>
+			<p data-i18n="support.availabilityBody">{en.support.availabilityBody}</p>
 		</aside>
 	</section>
 
-	<aside class="warning-panel">
-		<h2 data-i18n="support.noticeTitle">{en.support.noticeTitle}</h2>
-		<p data-i18n="support.noticeBody">{en.support.noticeBody}</p>
-	</aside>
+	<section class="contact-panel" aria-labelledby="support-contact-title">
+		<div>
+			<h2 id="support-contact-title" data-i18n="support.noticeTitle">{en.support.noticeTitle}</h2>
+			<p data-i18n="support.noticeBody">{en.support.noticeBody}</p>
+		</div>
+		<a class="button-link email-link" href={`mailto:${profile.supportEmail}`}>
+			<span data-i18n="support.emailCta">{en.support.emailCta}</span>
+			<span class="email-address">{profile.supportEmail}</span>
+		</a>
+	</section>
 
 	<section class="content-section" aria-labelledby="process-title">
 		<div class="section-heading">

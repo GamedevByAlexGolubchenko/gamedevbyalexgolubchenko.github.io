@@ -86,6 +86,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			const initialLocale = localStorage.getItem(storageKey) === 'ru' ? 'ru' : 'en';
 			applyLocale(initialLocale);
 
+			const syncNavigation = () => {
+				const page = document.body.dataset.page;
+				const current = page === 'home' && window.location.hash === '#work' ? 'work' : page;
+
+				document.querySelectorAll('[data-nav]').forEach((link) => {
+					const isCurrent = link.dataset.nav === current;
+					link.classList.toggle('active', isCurrent);
+					if (isCurrent) {
+						link.setAttribute('aria-current', current === 'work' ? 'location' : 'page');
+					} else {
+						link.removeAttribute('aria-current');
+					}
+				});
+			};
+
+			syncNavigation();
+			window.addEventListener('hashchange', syncNavigation);
+
 			document.querySelector('[data-language-toggle]')?.addEventListener('click', (event) => {
 				const button = event.currentTarget;
 				const nextLocale = button.dataset.locale === 'en' ? 'ru' : 'en';

@@ -20,6 +20,8 @@
 html {
 	scroll-behavior: smooth;
 	background: var(--paper);
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
 }
 
 body {
@@ -235,7 +237,7 @@ h1 {
 .index-label { margin-bottom: 1rem; color: var(--muted); }
 .index-value { margin: 0; font: 600 1rem/1.4 var(--sans); }
 
-.draft-banner, .warning-panel {
+.draft-banner, .warning-panel, .contact-panel {
 	display: grid;
 	grid-template-columns: 1fr 2fr;
 	gap: 2rem;
@@ -254,6 +256,23 @@ h1 {
 .draft-banner p, .warning-panel p { margin: 0; color: var(--muted); font-size: 0.9rem; }
 .warning-panel { padding-block: 2rem; }
 .warning-panel p { max-width: 780px; color: var(--ink); font-size: 1rem; }
+
+.contact-panel {
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	padding-block: 2rem;
+}
+
+.contact-panel h2 {
+	margin: 0 0 0.45rem;
+	font: 700 0.72rem/1.4 var(--mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.contact-panel p { max-width: 680px; margin: 0; color: var(--muted); font-size: 0.9rem; }
+.email-link { min-width: min(100%, 315px); }
+.email-link .email-address { font-weight: 500; text-transform: none; }
 
 .content-section {
 	padding: clamp(5.5rem, 10vw, 9rem) 0;
@@ -452,10 +471,13 @@ h1 {
 		border-right: 0;
 		border-bottom: 1px solid var(--ink);
 	}
-	h1 { font-size: clamp(3.35rem, 15vw, 5.8rem); }
+	.hero h1, .support-hero h1 {
+		font-size: clamp(3.35rem, 15vw, 5.8rem);
+		overflow-wrap: break-word;
+	}
 	.hero-index, .support-aside { min-height: 180px; padding: 1.5rem 0; }
 	.index-copy { writing-mode: initial; transform: none; }
-	.draft-banner, .warning-panel, .section-heading, .support-callout { grid-template-columns: 1fr; }
+	.draft-banner, .warning-panel, .contact-panel, .section-heading, .support-callout { grid-template-columns: 1fr; }
 	.skills-list { margin-left: 0; }
 	.projects-grid, .process-grid { grid-template-columns: 1fr; }
 	.project-card { min-height: 360px; }
@@ -471,7 +493,14 @@ h1 {
 @media (max-width: 480px) {
 	.action-row { flex-direction: column; }
 	.button-link { width: 100%; }
+	.email-link { position: relative; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
+	.email-link::after { position: absolute; top: 50%; right: 1.1rem; transform: translateY(-50%); }
+	.email-link .email-address { max-width: calc(100% - 1.5rem); overflow-wrap: anywhere; }
 	.primary-nav { gap: 0.5rem; font-size: 0.68rem; }
+}
+
+@media (hover: none) {
+	.primary-nav a:hover:not(.active)::after { transform: scaleX(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

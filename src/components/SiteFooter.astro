@@ -9,6 +9,12 @@ import { profile } from '../data/site';
 	</div>
 	<div class="footer-meta">
 		<a href={profile.github} target="_blank" rel="noreferrer" data-i18n="common.github">GitHub profile</a>
-		<p>© {new Date().getFullYear()} <span data-i18n="common.copyright">Alex Golubchenko</span></p>
+		<p>© <span data-current-year>{new Date().getFullYear()}</span> <span data-i18n="common.copyright">Alex Golubchenko</span></p>
 	</div>
 </footer>
+
+<script>
+	document.querySelectorAll('[data-current-year]').forEach((element) => {
+		element.textContent = String(new Date().getFullYear());
+	});
+</script>

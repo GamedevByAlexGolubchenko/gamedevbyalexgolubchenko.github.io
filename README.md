@@ -15,4 +15,4 @@ Manage the background server with `npx astro dev status`, `npx astro dev logs`, 
 
 ## Before Unity Asset Store submission
 
-The project cards and support contact are intentionally marked as temporary. Replace all placeholder portfolio entries with verified Unity work and add an active public support email before using the site in a publisher submission.
+The project cards are intentionally marked as temporary. Replace all placeholder portfolio entries with verified Unity work before using the site in a publisher submission. Product support is available at `support@alexgolubchenko.com`.
