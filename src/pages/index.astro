@@ -53,17 +53,30 @@ const en = translations.en;
 		</div>
 
 		<div class="projects-grid">
-			{projects.map((project) => (
-				<article class="project-card">
-					<div class="project-topline">
-						<span class="project-number">{project.number}</span>
-						<span class="project-status" data-i18n="home.projectStatus">{en.home.projectStatus}</span>
+			{projects.map((project, index) => {
+				const copy = en.home.projects[index];
+				return (
+				<article class:list={["project-card", { featured: "image" in project }]}>
+					{"image" in project && (
+						<img class="project-image" src={project.image} alt={copy.alt} data-i18n-alt={`home.projects.${index}.alt`} loading="lazy" />
+					)}
+					<div class="project-copy">
+						<div class="project-topline">
+							<span class="project-number">{project.number}</span>
+							<span class="project-status" data-i18n={`home.projects.${index}.status`}>{copy.status}</span>
+						</div>
+						<h3 data-i18n={`home.projects.${index}.title`}>{copy.title}</h3>
+						<p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
+						<p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
+						{"href" in project && (
+							<a class="project-link" href={project.href} target="_blank" rel="noreferrer" data-i18n={`home.projects.${index}.cta`}>
+								{copy.cta}
+							</a>
+						)}
 					</div>
-					<h3 data-i18n="home.projectTitle">{en.home.projectTitle}</h3>
-					<p data-i18n="home.projectBody">{en.home.projectBody}</p>
-					<p class="project-meta" data-i18n="home.projectMeta">{en.home.projectMeta}</p>
 				</article>
-			))}
+				);
+			})}
 		</div>
 	</section>
 

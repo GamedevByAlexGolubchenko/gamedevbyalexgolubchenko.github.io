@@ -68,7 +68,7 @@ const en = translations.en;
 			<h2 id="contact-title" data-i18n="support.contactTitle">{en.support.contactTitle}</h2>
 			<p data-i18n="support.contactBody">{en.support.contactBody}</p>
 		</div>
-		<a class="button-link" href={profile.github} target="_blank" rel="noreferrer" data-i18n="support.contactCta">
+		<a class="button-link" href={`mailto:${profile.contactEmail}`} data-i18n="support.contactCta">
 			{en.support.contactCta}
 		</a>
 	</section>
