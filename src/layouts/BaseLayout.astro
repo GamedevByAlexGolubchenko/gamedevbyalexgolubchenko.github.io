@@ -50,6 +50,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				const dictionary = dictionaries[locale] || dictionaries.en;
 				document.documentElement.lang = locale;
 
+				document.querySelectorAll('[data-i18n-aria]').forEach((element) => {
+					const value = getValue(dictionary, element.dataset.i18nAria);
+					if (typeof value === 'string') element.setAttribute('aria-label', value);
+				});
+
 				document.querySelectorAll('[data-i18n]').forEach((element) => {
 					const value = getValue(dictionary, element.dataset.i18n);
 					if (typeof value === 'string') element.textContent = value;

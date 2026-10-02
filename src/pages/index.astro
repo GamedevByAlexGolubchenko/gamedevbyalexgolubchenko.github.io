@@ -1,4 +1,5 @@
 ---
+import ProjectGallery from '../components/ProjectGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile, projects, translations } from '../data/site';
 
@@ -25,10 +26,6 @@ const en = translations.en;
 		</aside>
 	</section>
 
-	<aside class="draft-banner">
-		<strong data-i18n="common.draft">{en.common.draft}</strong>
-		<p data-i18n="common.draftText">{en.common.draftText}</p>
-	</aside>
 
 	<section class="content-section" aria-labelledby="about-title">
 		<div class="section-heading">
@@ -52,32 +49,22 @@ const en = translations.en;
 			</div>
 		</div>
 
-		<div class="projects-grid">
-			{projects.map((project, index) => {
-				const copy = en.home.projects[index];
-				return (
-				<article class:list={["project-card", { featured: "image" in project }]}>
-					{"image" in project && (
-						<img class="project-image" src={project.image} alt={copy.alt} data-i18n-alt={`home.projects.${index}.alt`} loading="lazy" />
-					)}
-					<div class="project-copy">
-						<div class="project-topline">
-							<span class="project-number">{project.number}</span>
-							<span class="project-status" data-i18n={`home.projects.${index}.status`}>{copy.status}</span>
-						</div>
-						<h3 data-i18n={`home.projects.${index}.title`}>{copy.title}</h3>
-						<p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
-						<p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
-						{"href" in project && (
-							<a class="project-link" href={project.href} target="_blank" rel="noreferrer" data-i18n={`home.projects.${index}.cta`}>
-								{copy.cta}
-							</a>
-						)}
-					</div>
-				</article>
-				);
-			})}
-		</div>
+<div class="projects-grid">
+ {projects.map((project, index) => {
+ const copy = en.home.projects[index];
+ return <article class="project-card" aria-labelledby={`project-${project.id}`}>
+ <div class="project-copy">
+ <div class="project-topline"><span class="project-number">{project.number}</span><span class="project-status" data-i18n={`home.projects.${index}.status`}>{copy.status}</span></div>
+ <h3 id={`project-${project.id}`} data-i18n={`home.projects.${index}.title`}>{copy.title}</h3>
+ <p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
+ <ul class="project-features" data-i18n-list={`home.projects.${index}.features`}>{copy.features.map(feature => <li data-list-item>{feature}</li>)}</ul>
+ <p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
+ </div>
+ <div class="project-media"><ProjectGallery project={project} index={index} />
+ {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer" data-i18n={`home.projects.${index}.cta`}>{copy.cta}</a>}
+ </div></article>;
+ })}
+ </div>
 	</section>
 
 	<section class="support-callout" aria-labelledby="support-title">

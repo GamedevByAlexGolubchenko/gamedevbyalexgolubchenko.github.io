@@ -1,0 +1,54 @@
+---
+import { translations, type Project } from '../data/site';
+interface Props { project: Project; index: number }
+const { project, index } = Astro.props;
+const copy = translations.en.home.projects[index];
+const prefix = `home.projects.${index}`;
+---
+<section class="project-gallery" data-gallery aria-label={translations.en.gallery.label} data-i18n-aria="gallery.label">
+ <div class="gallery-frame">
+  <div class="gallery-slide gallery-cover" data-slide>
+   <img src={project.cover} alt={copy.coverAlt} data-i18n-alt={`${prefix}.coverAlt`} width="1672" height="941" loading="lazy" />
+   <span class="cover-title" data-i18n={`${prefix}.title`}>{copy.title}</span>
+  </div>
+  {project.screenshots.map((shot) => <figure class="gallery-slide" data-slide hidden>
+   <img src={shot.src} alt={copy[`${shot.key}Alt`]} data-i18n-alt={`${prefix}.${shot.key}Alt`} loading="lazy" />
+  </figure>)}
+ </div>
+ <div class="gallery-caption" aria-live="polite" aria-atomic="true">
+  <span data-caption data-i18n="gallery.cover">{translations.en.gallery.cover}</span>
+  {project.screenshots.map(shot => <span data-caption data-i18n={`${prefix}.${shot.key}`} hidden>{copy[shot.key]}</span>)}
+ </div>
+ {project.screenshots.length > 0 && <div class="gallery-controls" data-controls hidden>
+  <button type="button" data-previous><span aria-hidden="true">← </span><span data-i18n="gallery.previous">Previous</span></button>
+  <output data-position>1 / {project.screenshots.length + 1}</output>
+  <button type="button" data-next><span data-i18n="gallery.next">Next</span><span aria-hidden="true"> →</span></button>
+ </div>}
+ <details class="gallery-originals">
+  <summary data-i18n="gallery.original">Open original</summary>
+  <ul>{project.screenshots.map(shot => <li><a href={shot.src} target="_blank" rel="noopener noreferrer" data-i18n={`${prefix}.${shot.key}`}>{copy[shot.key]}</a></li>)}</ul>
+  {project.screenshots.length === 0 && <a href={project.cover} target="_blank" rel="noopener noreferrer" data-i18n="gallery.cover">Cover</a>}
+ </details>
+</section>
+<script>
+ document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(gallery => {
+  const slides = [...gallery.querySelectorAll<HTMLElement>('[data-slide]')];
+  const captions = [...gallery.querySelectorAll<HTMLElement>('[data-caption]')];
+  const controls = gallery.querySelector<HTMLElement>('[data-controls]');
+  if (slides.length < 2 || !controls) return;
+  let current = 0;
+  controls.hidden = false;
+  const move = (direction: number) => {
+   current = (current + direction + slides.length) % slides.length;
+   slides.forEach((slide, i) => { slide.hidden = i !== current; });
+   captions.forEach((caption, i) => { caption.hidden = i !== current; });
+   gallery.querySelector('[data-position]')!.textContent = `${current + 1} / ${slides.length}`;
+  };
+  gallery.querySelector('[data-previous]')?.addEventListener('click', () => move(-1));
+  gallery.querySelector('[data-next]')?.addEventListener('click', () => move(1));
+  gallery.addEventListener('keydown', event => {
+   if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+   event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1);
+  });
+ });
+</script>

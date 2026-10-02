@@ -10,15 +10,16 @@ export const profile = {
 	skills: ['Unity', 'C#', '.NET', 'Editor tooling', 'Runtime systems', 'Developer experience'],
 } as const;
 
-export const projects = [
-	{
-		number: '01',
-		image: '/images/projects/multiplayer-lobby-system.png',
-		href: 'https://www.youtube.com/watch?v=eXjHYdSl-No',
-	},
-	{ number: '02' },
-	{ number: '03' },
-] as const;
+export type Project = { id: string; number: string; cover: string; screenshots: { src: string; key: string }[]; video?: string };
+export const projects: Project[] = [
+ { id: 'lobby', number: '01', cover: '/images/projects/lobby-cover.png', screenshots: [
+   { src: '/images/projects/lobby-asset-1.png', key: 'overview' },
+   { src: '/images/projects/lobby-asset-2.png', key: 'creation' },
+   { src: '/images/projects/lobby-asset-3.png', key: 'filtering' },
+   { src: '/images/projects/lobby-asset-4.png', key: 'joining' },
+ ], video: 'https://www.youtube.com/watch?v=eXjHYdSl-No' },
+ { id: 'localization', number: '02', cover: '/images/projects/localization-cover.png', screenshots: [] },
+];
 
 export const translations = {
 	en: {
@@ -28,11 +29,10 @@ export const translations = {
 			supportTitle: 'Support — Aleksei Golubchenko',
 			supportDescription: 'Product support and contact information for Unity tools by Aleksei Golubchenko.',
 		},
+		gallery: { previous: 'Previous', next: 'Next', original: 'Open original', cover: 'Cover', label: 'Project gallery' },
 		nav: { home: 'Home', work: 'Work', support: 'Support', language: 'Switch language' },
 		common: {
 			status: 'Senior Software Engineer',
-			draft: 'Portfolio in progress',
-			draftText: 'The first selected project is published. Two additional project cards are being prepared and remain clearly marked.',
 			linkedin: 'LinkedIn',
 			youtube: 'YouTube',
 			footerLine: 'Maintainable software, engineered with care.',
@@ -52,29 +52,46 @@ export const translations = {
 			skillsLabel: 'Core capabilities',
 			workLabel: 'Selected work',
 			workTitle: 'Reusable systems for real development workflows.',
-			workIntro: 'The first project is available to explore now. Two additional portfolio entries are in preparation and are clearly marked.',
+			workIntro: 'Two Unity systems built for practical game-development workflows.',
 			projects: [
-				{
-					status: 'Completed · Private use',
-					title: 'Multiplayer Lobby System',
-					body: 'A reusable Steamworks-based lobby system for Unity games, with lobby discovery, filtering, validation, localization, and real-time updates.',
-					meta: 'Unity · C# · Steamworks SDK',
-					cta: 'Watch showcase',
-					alt: 'Server Observer interface listing Steam lobbies with player counts, timing filters, and color-coded ping values.',
-				},
-				{
-					status: 'In preparation',
-					title: 'Next project',
-					body: 'A second verified Unity or .NET project will be published here.',
-					meta: 'Details in preparation',
-				},
-				{
-					status: 'In preparation',
-					title: 'Next project',
-					body: 'A third verified Unity or .NET project will be published here.',
-					meta: 'Details in preparation',
-				},
-			],
+  {
+    "status": "Preparing for publication",
+    "title": "Lobby System",
+    "body": "A Unity lobby system used in my own game and adapted for release as a reusable asset with a more polished, flexibly configurable UI.",
+    "features": [
+      "Lobby discovery and filtering",
+      "Validation and real-time updates",
+      "Configurable UI for the asset edition"
+    ],
+    "meta": "Unity · C# · Steamworks",
+    "cta": "Watch the game-version demo",
+    "coverAlt": "Abstract network illustration for Lobby System",
+    "gameScreenshot": "Original game version — Server Observer lobby browser",
+    "gameScreenshotAlt": "Game-version lobby browser with player counts and ping values.",
+    "overview": "Asset edition — lobby browser and selected lobby details",
+    "overviewAlt": "Steam Lobby Observer Demo listing lobbies with player counts, ping, mode, map, selected lobby details and a status log.",
+    "creation": "Asset edition — create a lobby",
+    "creationAlt": "Create Lobby dialog with lobby name, maximum players, game mode and map fields.",
+    "filtering": "Asset edition — filter lobbies by map",
+    "filteringAlt": "Lobby browser filtered to the Desert map, showing four matching lobbies.",
+    "joining": "Demo limitation — joining games is not yet implemented",
+    "joiningAlt": "Join Lobby Info dialog stating that the ability to join games is coming in future updates."
+  },
+  {
+    "status": "Project",
+    "title": "Localization & Input Rebinding",
+    "body": "A Unity project bringing together localization and input rebinding.",
+    "features": [
+      "Localization",
+      "Input rebinding"
+    ],
+    "meta": "Unity",
+    "cta": "Watch demonstration",
+    "coverAlt": "Abstract illustration of connected language and input systems",
+    "gameScreenshot": "",
+    "gameScreenshotAlt": ""
+  }
+],
 			supportLabel: 'Product support',
 			supportTitle: 'A clear route from issue to answer.',
 			supportBody: 'The support page is the permanent contact point for published Unity assets and explains what to include in a useful report.',
@@ -113,11 +130,10 @@ export const translations = {
 			supportTitle: 'Поддержка — Алексей Голубченко',
 			supportDescription: 'Поддержка Unity-инструментов и контактная информация Алексея Голубченко.',
 		},
+		gallery: { previous: 'Назад', next: 'Вперёд', original: 'Открыть оригинал', cover: 'Обложка', label: 'Галерея проекта' },
 		nav: { home: 'Главная', work: 'Работы', support: 'Поддержка', language: 'Сменить язык' },
 		common: {
 			status: 'Senior Software Engineer',
-			draft: 'Портфолио готовится',
-			draftText: 'Первый избранный проект уже опубликован. Ещё две карточки готовятся и явно отмечены.',
 			linkedin: 'LinkedIn',
 			youtube: 'YouTube',
 			footerLine: 'Поддерживаемое ПО с инженерным вниманием к деталям.',
@@ -137,29 +153,46 @@ export const translations = {
 			skillsLabel: 'Основные компетенции',
 			workLabel: 'Избранные работы',
 			workTitle: 'Многократно используемые системы для реальных рабочих процессов.',
-			workIntro: 'Первый проект уже можно посмотреть. Ещё две работы готовятся к публикации и явно отмечены.',
+			workIntro: 'Две Unity-системы для практических задач разработки игр.',
 			projects: [
-				{
-					status: 'Завершён · Частное использование',
-					title: 'Система многопользовательских лобби',
-					body: 'Многократно используемая система лобби для Unity-игр на базе Steamworks: поиск, фильтрация, валидация, локализация и обновления в реальном времени.',
-					meta: 'Unity · C# · Steamworks SDK',
-					cta: 'Смотреть демонстрацию',
-					alt: 'Интерфейс Server Observer со списком Steam-лобби, количеством игроков, временными фильтрами и цветными показателями пинга.',
-				},
-				{
-					status: 'Готовится',
-					title: 'Следующий проект',
-					body: 'Здесь будет опубликован второй проверенный проект на Unity или .NET.',
-					meta: 'Материалы готовятся',
-				},
-				{
-					status: 'Готовится',
-					title: 'Следующий проект',
-					body: 'Здесь будет опубликован третий проверенный проект на Unity или .NET.',
-					meta: 'Материалы готовятся',
-				},
-			],
+  {
+    "status": "Готовится к публикации",
+    "title": "Lobby System",
+    "body": "Система лобби для Unity, используемая в моей игре и адаптированная для выпуска в виде ассета с более выразительным и гибко настраиваемым UI.",
+    "features": [
+      "Поиск и фильтрация лобби",
+      "Валидация и обновления в реальном времени",
+      "Настраиваемый UI в версии ассета"
+    ],
+    "meta": "Unity · C# · Steamworks",
+    "cta": "Демонстрация версии для игры",
+    "coverAlt": "Абстрактная сетевая композиция для Lobby System",
+    "gameScreenshot": "Исходная версия для игры — браузер лобби Server Observer",
+    "gameScreenshotAlt": "Браузер лобби игровой версии с количеством игроков и показателями пинга.",
+    "overview": "Версия ассета — браузер лобби и сведения о выбранном лобби",
+    "overviewAlt": "Steam Lobby Observer Demo: список лобби с количеством игроков, пингом, режимом, картой, сведениями о выбранном лобби и журналом событий.",
+    "creation": "Версия ассета — создание лобби",
+    "creationAlt": "Окно создания лобби с названием, максимальным количеством игроков, режимом игры и картой.",
+    "filtering": "Версия ассета — фильтрация лобби по карте",
+    "filteringAlt": "Браузер лобби с фильтром по карте Desert и четырьмя подходящими лобби.",
+    "joining": "Ограничение демо — подключение к игре пока не реализовано",
+    "joiningAlt": "Окно Join Lobby Info сообщает, что возможность подключения к играм появится в будущих обновлениях."
+  },
+  {
+    "status": "Проект",
+    "title": "Localization & Input Rebinding",
+    "body": "Unity-проект, объединяющий локализацию и переназначение управления.",
+    "features": [
+      "Локализация",
+      "Переназначение управления"
+    ],
+    "meta": "Unity",
+    "cta": "Смотреть демонстрацию",
+    "coverAlt": "Абстрактная композиция связанных систем языка и управления",
+    "gameScreenshot": "",
+    "gameScreenshotAlt": ""
+  }
+],
 			supportLabel: 'Поддержка продуктов',
 			supportTitle: 'Понятный путь от проблемы к ответу.',
 			supportBody: 'Страница поддержки — постоянный контакт для опубликованных Unity-ассетов; на ней указано, что приложить к полезному обращению.',
