@@ -96,9 +96,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			const initialLocale = localStorage.getItem(storageKey) === 'ru' ? 'ru' : 'en';
 			applyLocale(initialLocale);
 
+			const workSection = document.querySelector('#work');
 			const syncNavigation = () => {
 				const page = document.body.dataset.page;
-				const current = page === 'home' && window.location.hash === '#work' ? 'work' : page;
+				const reachedWork = workSection && workSection.getBoundingClientRect().top <= window.innerHeight * 0.25;
+				const current = page === 'home' && reachedWork ? 'work' : page;
 
 				document.querySelectorAll('[data-nav]').forEach((link) => {
 					const isCurrent = link.dataset.nav === current;
@@ -112,7 +114,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			};
 
 			syncNavigation();
-			window.addEventListener('hashchange', syncNavigation);
+			let navigationFrame = 0;
+			const scheduleNavigationSync = () => {
+				if (navigationFrame) return;
+				navigationFrame = window.requestAnimationFrame(() => {
+					navigationFrame = 0;
+					syncNavigation();
+				});
+			};
+			if (workSection) {
+				window.addEventListener('scroll', scheduleNavigationSync, { passive: true });
+				window.addEventListener('resize', scheduleNavigationSync);
+				window.addEventListener('hashchange', scheduleNavigationSync);
+				window.addEventListener('pageshow', scheduleNavigationSync);
+				new ResizeObserver(scheduleNavigationSync).observe(document.querySelector('main'));
+			}
 
 			document.querySelector('[data-language-toggle]')?.addEventListener('click', (event) => {
 				const button = event.currentTarget;

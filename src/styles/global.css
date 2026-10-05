@@ -84,15 +84,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .wordmark-mark {
-	display: grid;
+	display: block;
 	width: 2.35rem;
 	height: 2.35rem;
-	place-items: center;
+	flex-shrink: 0;
 	border-radius: 50%;
-	background: var(--ink);
-	color: var(--signal);
-	font: 700 0.72rem/1 var(--mono);
-	letter-spacing: -0.04em;
+	object-fit: cover;
 }
 
 .wordmark-name {

@@ -12,13 +12,18 @@ export const profile = {
 
 export type Project = { id: string; number: string; cover: string; screenshots: { src: string; key: string }[]; video?: string };
 export const projects: Project[] = [
- { id: 'lobby', number: '01', cover: '/images/projects/lobby-cover.png', screenshots: [
+ { id: 'lobby', number: '01', cover: '/images/projects/lobby-cover-v3.png', screenshots: [
    { src: '/images/projects/lobby-asset-1.png', key: 'overview' },
    { src: '/images/projects/lobby-asset-2.png', key: 'creation' },
    { src: '/images/projects/lobby-asset-3.png', key: 'filtering' },
    { src: '/images/projects/lobby-asset-4.png', key: 'joining' },
  ], video: 'https://www.youtube.com/watch?v=eXjHYdSl-No' },
- { id: 'localization', number: '02', cover: '/images/projects/localization-cover.png', screenshots: [] },
+ { id: 'localization', number: '02', cover: '/images/projects/localization-cover-v3.png', screenshots: [
+   { src: '/images/projects/localization-input-1.png', key: 'localizedSettings' },
+   { src: '/images/projects/localization-input-2.png', key: 'inputBindings' },
+   { src: '/images/projects/localization-input-3.png', key: 'graphicsSettings' },
+   { src: '/images/projects/localization-input-4.png', key: 'audioSettings' },
+ ] },
 ];
 
 export const translations = {
@@ -65,7 +70,7 @@ export const translations = {
     ],
     "meta": "Unity · C# · Steamworks",
     "cta": "Watch the game-version demo",
-    "coverAlt": "Abstract network illustration for Lobby System",
+    "coverAlt": "Lobby System cover with the lobby browser interface on a light background",
     "gameScreenshot": "Original game version — Server Observer lobby browser",
     "gameScreenshotAlt": "Game-version lobby browser with player counts and ping values.",
     "overview": "Asset edition — lobby browser and selected lobby details",
@@ -87,9 +92,17 @@ export const translations = {
     ],
     "meta": "Unity",
     "cta": "Watch demonstration",
-    "coverAlt": "Abstract illustration of connected language and input systems",
+    "coverAlt": "Localization & Input Rebinding cover with controls, Spanish localization, graphics and audio interfaces on a light background",
     "gameScreenshot": "",
-    "gameScreenshotAlt": ""
+    "gameScreenshotAlt": "",
+    "localizedSettings": "Spanish localization — unsaved changes dialog",
+    "localizedSettingsAlt": "Settings in Spanish with Español selected and a confirmation dialog for leaving without applying unsaved changes.",
+    "inputBindings": "Controls — keyboard and mouse bindings",
+    "inputBindingsAlt": "Controls settings showing movement, jump, run, inventory and attack bindings, including Up Arrow for moving forward and B for jumping.",
+    "graphicsSettings": "Graphics — display settings",
+    "graphicsSettingsAlt": "Graphics settings showing 1920×1080 at 120 Hz, borderless window mode and a 120 FPS limit.",
+    "audioSettings": "Audio — volume controls",
+    "audioSettingsAlt": "Audio settings with separate sliders for master, music, sound effects and voice chat volume."
   }
 ],
 			supportLabel: 'Product support',
@@ -166,7 +179,7 @@ export const translations = {
     ],
     "meta": "Unity · C# · Steamworks",
     "cta": "Демонстрация версии для игры",
-    "coverAlt": "Абстрактная сетевая композиция для Lobby System",
+    "coverAlt": "Обложка Lobby System с интерфейсом браузера лобби на светлом фоне",
     "gameScreenshot": "Исходная версия для игры — браузер лобби Server Observer",
     "gameScreenshotAlt": "Браузер лобби игровой версии с количеством игроков и показателями пинга.",
     "overview": "Версия ассета — браузер лобби и сведения о выбранном лобби",
@@ -188,9 +201,17 @@ export const translations = {
     ],
     "meta": "Unity",
     "cta": "Смотреть демонстрацию",
-    "coverAlt": "Абстрактная композиция связанных систем языка и управления",
+    "coverAlt": "Обложка Localization & Input Rebinding с интерфейсами управления, испанской локализации, графики и звука на светлом фоне",
     "gameScreenshot": "",
-    "gameScreenshotAlt": ""
+    "gameScreenshotAlt": "",
+    "localizedSettings": "Испанская локализация — предупреждение о несохранённых изменениях",
+    "localizedSettingsAlt": "Настройки на испанском языке: выбран Español и открыто окно подтверждения выхода без применения несохранённых изменений.",
+    "inputBindings": "Управление — назначение клавиш и кнопок мыши",
+    "inputBindingsAlt": "Настройки управления с назначениями для движения, прыжка, бега, инвентаря и атаки: стрелка вверх для движения вперёд и B для прыжка.",
+    "graphicsSettings": "Графика — настройки экрана",
+    "graphicsSettingsAlt": "Настройки графики: разрешение 1920×1080 при 120 Гц, оконный режим без рамки и ограничение 120 FPS.",
+    "audioSettings": "Звук — регулировка громкости",
+    "audioSettingsAlt": "Настройки звука с отдельными ползунками общей громкости, музыки, звуковых эффектов и голосового чата."
   }
 ],
 			supportLabel: 'Поддержка продуктов',

@@ -9,7 +9,6 @@ const prefix = `home.projects.${index}`;
  <div class="gallery-frame">
   <div class="gallery-slide gallery-cover" data-slide>
    <img src={project.cover} alt={copy.coverAlt} data-i18n-alt={`${prefix}.coverAlt`} width="1672" height="941" loading="lazy" />
-   <span class="cover-title" data-i18n={`${prefix}.title`}>{copy.title}</span>
   </div>
   {project.screenshots.map((shot) => <figure class="gallery-slide" data-slide hidden>
    <img src={shot.src} alt={copy[`${shot.key}Alt`]} data-i18n-alt={`${prefix}.${shot.key}Alt`} loading="lazy" />
