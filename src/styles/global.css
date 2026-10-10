@@ -18,6 +18,7 @@
 * { box-sizing: border-box; }
 
 html {
+	overflow-x: clip;
 	scroll-behavior: smooth;
 	background: var(--paper);
 	-webkit-text-size-adjust: 100%;
@@ -26,7 +27,8 @@ html {
 
 body {
 	margin: 0;
-	min-width: 320px;
+	min-width: 0;
+	overflow-wrap: anywhere;
 	color: var(--ink);
 	background: var(--paper);
 	font-size: 16px;
@@ -153,6 +155,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .hero-main, .support-hero-main {
 	display: flex;
+	min-width: 0;
 	flex-direction: column;
 	justify-content: center;
 	padding: 7rem clamp(1rem, 5vw, 5.5rem) 6rem 0;
@@ -168,6 +171,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .eyebrow::before { width: 2.5rem; height: 0.72rem; background: var(--signal); content: ""; }
 h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { max-width: 100%; overflow-wrap: anywhere; }
+img, video, svg { max-width: 100%; }
+.page-shell :where(section, aside, article, div, nav, ul, li) { min-width: 0; }
 
 h1 {
 	max-width: 920px;
@@ -175,6 +181,14 @@ h1 {
 	font: 500 clamp(4rem, 8.5vw, 8.5rem)/0.87 var(--serif);
 	letter-spacing: -0.068em;
 }
+
+html[lang="ru"] .hero h1 {
+	font-size: clamp(3.6rem, 7.5vw, 7.5rem);
+	line-height: 1.02;
+	letter-spacing: -0.045em;
+}
+
+html[lang="ru"] .support-hero h1 { line-height: 1.02; }
 
 .hero-intro {
 	max-width: 680px;
@@ -206,11 +220,32 @@ h1 {
 .button-link.secondary { background: transparent; color: var(--ink); }
 
 .hero-index {
+	position: relative;
+	min-height: 900px;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	padding: 2.2rem 0 2.2rem 2.2rem;
+	justify-content: center;
+	padding: 2.2rem 0 2.2rem 1.5rem;
 }
+
+.engineering-art {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 320 / 900;
+	overflow: visible;
+	color: var(--ink);
+}
+.art-wire { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.art-module rect { fill: var(--paper); stroke: var(--ink); }
+.art-module path { fill: none; stroke: var(--line); }
+.art-module text { fill: var(--ink); font: 500 18px var(--mono); }
+.art-module .art-number { fill: var(--muted); font-size: 8px; }
+.art-terminal { fill: var(--signal); stroke: var(--ink); }
 
 .availability {
 	display: flex;
@@ -230,9 +265,24 @@ h1 {
 	content: "";
 }
 
-.index-copy { writing-mode: vertical-rl; transform: rotate(180deg); }
+.index-copy { min-width: 0; }
 .index-label { margin-bottom: 1rem; color: var(--muted); }
-.index-value { margin: 0; font: 600 1rem/1.4 var(--sans); }
+.index-value {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.55rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font: 600 0.78rem/1.4 var(--sans);
+	overflow-wrap: break-word;
+}
+
+.index-value li {
+	max-width: 100%;
+	padding: 0.45rem 0.65rem;
+	border: 1px solid var(--line);
+}
 
 .draft-banner, .warning-panel, .contact-panel {
 	display: grid;
@@ -292,16 +342,37 @@ h1 {
 
 .section-copy { max-width: 720px; color: var(--muted); font-size: 1.08rem; }
 
-.skills-list {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.6rem;
+.capability-groups {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 2rem;
 	margin: 3rem 0 0 calc(17.5% + 2rem);
+}
+.capability-label { margin: 0 0 1rem; color: var(--muted); font: 700 0.72rem/1.4 var(--mono); letter-spacing: 0.09em; text-transform: uppercase; }
+.skills-list {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-auto-rows: minmax(76px, auto);
+	gap: 0.65rem;
+	margin: 0;
 	padding: 0;
 	list-style: none;
 }
-
-.skills-list li, .meta-chip {
+.skills-list li {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	padding: 1rem;
+	border: 1px solid var(--line);
+	background: rgba(255, 255, 255, 0.2);
+	font: 600 0.85rem/1.4 var(--sans);
+	transition: background 180ms ease, border-color 180ms ease;
+}
+.skill-marker { width: 0.4rem; height: 0.4rem; flex: 0 0 auto; background: var(--signal-dark); }
+@media (hover: hover) {
+	.skills-list li:hover { background: rgba(199, 241, 47, 0.12); border-color: var(--signal-dark); }
+}
+.meta-chip {
 	padding: 0.62rem 0.8rem;
 	border: 1px solid var(--line);
 	background: rgba(255, 255, 255, 0.2);
@@ -385,7 +456,7 @@ h1 {
 
 .support-hero {
 	display: grid;
-	grid-template-columns: 1.4fr 0.6fr;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
 	min-height: 570px;
 	border-bottom: 1px solid var(--ink);
 }
@@ -459,7 +530,7 @@ h1 {
 		color: var(--paper);
 	}
 	.primary-nav a::after { background: var(--signal); }
-	.hero, .support-hero { grid-template-columns: 1fr; min-height: 0; }
+	.hero, .support-hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
 	.hero-main, .support-hero-main {
 		min-height: 590px;
 		padding: 5rem 0 4rem;
@@ -468,19 +539,20 @@ h1 {
 	}
 	.hero h1, .support-hero h1 {
 		font-size: clamp(3.35rem, 15vw, 5.8rem);
-		overflow-wrap: break-word;
+		overflow-wrap: anywhere;
 	}
-	.hero-index, .support-aside { min-height: 180px; padding: 1.5rem 0; }
-	.index-copy { writing-mode: initial; transform: none; }
-	.draft-banner, .warning-panel, .contact-panel, .section-heading, .support-callout { grid-template-columns: 1fr; }
-	.skills-list { margin-left: 0; }
-	.projects-grid, .process-grid { grid-template-columns: 1fr; }
+	.hero-index { display: none; }
+	.support-aside { min-height: 180px; padding: 1.5rem 0; }
+	html[lang="ru"] .hero h1 { font-size: clamp(3rem, 13vw, 5.2rem); }
+	.draft-banner, .warning-panel, .contact-panel, .section-heading, .support-callout { grid-template-columns: minmax(0, 1fr); }
+	.capability-groups { margin-left: 0; grid-template-columns: minmax(0, 1fr); }
+	.projects-grid, .process-grid { grid-template-columns: minmax(0, 1fr); }
 	.project-card { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-block: 2rem; }
 	.cover-title { font-size: clamp(1.15rem, 4.5vw, 2rem); }
 	.process-item + .process-item { border-top: 1px solid var(--ink); border-left: 0; }
 	.process-item::before { margin-bottom: 3rem; }
 	.support-callout { align-items: start; }
-	.scope-list, .site-footer { grid-template-columns: 1fr; }
+	.scope-list, .site-footer { grid-template-columns: minmax(0, 1fr); }
 	.scope-list li:nth-child(n) { padding-inline: 0; border-left: 0; }
 	.footer-meta { text-align: left; }
 	.footer-links { justify-content: flex-start; }
@@ -488,6 +560,8 @@ h1 {
 }
 
 @media (max-width: 480px) {
+	.skills-list li { padding: 0.8rem; font-size: 0.8rem; }
+	html[lang="ru"] .hero h1 { font-size: clamp(2.5rem, 12.5vw, 3.75rem); }
 	.action-row { flex-direction: column; }
 	.button-link { width: 100%; }
 	.email-link { position: relative; flex-direction: column; gap: 0.35rem; align-items: flex-start; }

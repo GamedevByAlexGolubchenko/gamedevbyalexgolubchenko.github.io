@@ -1,7 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { translations, type PageName } from '../data/site';
+import { translations, careerStart, type PageName } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
@@ -18,6 +18,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			(() => {
+				let locale = 'en';
+				try { locale = localStorage.getItem('alex-site-locale') === 'ru' ? 'ru' : 'en'; } catch {}
+				document.documentElement.lang = locale;
+				if (locale === 'ru') {
+					document.documentElement.setAttribute('data-locale-pending', '');
+					// Keep the page usable if localization unexpectedly fails.
+					window.setTimeout(() => document.documentElement.removeAttribute('data-locale-pending'), 1500);
+				}
+			})();
+		</script>
+		<style is:global>
+			html[data-locale-pending] body { visibility: hidden; }
+		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#f2f0e9" />
 		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
@@ -27,7 +42,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:title" content={title} data-i18n-content={`meta.${page}Title`} />
 		<meta property="og:description" content={description} data-i18n-content={`meta.${page}Description`} />
-		<meta property="og:site_name" content="Aleksei Golubchenko" />
+		<meta property="og:site_name" content={translations.en.common.name} data-i18n-content="common.name" />
 		<meta name="twitter:card" content="summary" />
 		<title data-i18n={`meta.${page}Title`}>{title}</title>
 	</head>
@@ -40,11 +55,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		</div>
 
 		<script id="i18n-data" type="application/json" set:html={JSON.stringify(translations)}></script>
-		<script>
+		<script id="career-start" type="application/json" set:html={JSON.stringify(careerStart)}></script>
+		<script is:inline>
 			const storageKey = 'alex-site-locale';
 			const dataNode = document.querySelector('#i18n-data');
 			const dictionaries = dataNode ? JSON.parse(dataNode.textContent || '{}') : {};
-			const getValue = (source, path) => path.split('.').reduce((value, key) => value?.[key], source);
+			const careerStart = JSON.parse(document.querySelector('#career-start').textContent);
+			const getValue = (source, path) => {
+				const value = path.split('.').reduce((value, key) => value?.[key], source);
+				if (typeof value !== 'string' || !value.includes('{experienceYears}')) return value;
+				const now = new Date();
+				const years = Math.max(0, now.getFullYear() - careerStart.year - (now.getMonth() + 1 < careerStart.month ? 1 : 0));
+				const locale = document.documentElement.lang;
+				const category = new Intl.PluralRules(locale).select(years);
+				const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : (category === 'one' ? 'year' : 'years');
+				return value.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
+			};
 
 			const applyLocale = (locale) => {
 				const dictionary = dictionaries[locale] || dictionaries.en;
@@ -93,8 +119,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				if (typeof localizedTitle === 'string') document.title = localizedTitle;
 			};
 
-			const initialLocale = localStorage.getItem(storageKey) === 'ru' ? 'ru' : 'en';
+			const initialLocale = document.documentElement.lang === 'ru' ? 'ru' : 'en';
 			applyLocale(initialLocale);
+			document.documentElement.removeAttribute('data-locale-pending');
 
 			const workSection = document.querySelector('#work');
 			const syncNavigation = () => {
@@ -133,8 +160,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			document.querySelector('[data-language-toggle]')?.addEventListener('click', (event) => {
 				const button = event.currentTarget;
 				const nextLocale = button.dataset.locale === 'en' ? 'ru' : 'en';
-				localStorage.setItem(storageKey, nextLocale);
 				applyLocale(nextLocale);
+				try { localStorage.setItem(storageKey, nextLocale); } catch {}
 			});
 		</script>
 	</body>

@@ -1,7 +1,7 @@
 ---
 import ProjectGallery from '../components/ProjectGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { profile, projects, translations } from '../data/site';
+import { profile, projects, translations, formatExperienceText } from '../data/site';
 
 const en = translations.en;
 ---
@@ -18,11 +18,22 @@ const en = translations.en;
 			</div>
 		</div>
 		<aside class="hero-index" aria-label="Profile summary">
-			<p class="availability" data-i18n="common.status">{en.common.status}</p>
-			<div class="index-copy">
-				<p class="index-label" data-i18n="home.indexLabel">{en.home.indexLabel}</p>
-				<p class="index-value" data-i18n="home.indexValue">{en.home.indexValue}</p>
-			</div>
+			<svg class="engineering-art" viewBox="0 0 320 900" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="engineering-art-title">
+                <title id="engineering-art-title">.NET, Unity, C#</title>
+                <g class="art-wire">
+                    <path d="M160 -1000V58L72 146V236L160 324V570L248 658V748L160 836V1900" />
+                    <path d="M320 114H248L72 290V358L160 450L248 542V610L72 786H0" />
+                </g>
+                <g class="art-module">
+                    <rect x="27" y="154" width="90" height="68" /><path d="M27 172H117" /><text x="37" y="167" class="art-number">01</text><text x="72" y="202" text-anchor="middle">.NET</text>
+                    <rect x="115" y="416" width="90" height="68" /><path d="M115 434H205" /><text x="125" y="429" class="art-number">02</text><text x="160" y="464" text-anchor="middle">C#</text>
+                    <rect x="203" y="678" width="90" height="68" /><path d="M203 696H293" /><text x="213" y="691" class="art-number">03</text><text x="248" y="726" text-anchor="middle">Unity</text>
+                </g>
+                <g class="art-terminal">
+                    <circle cx="160" cy="58" r="5" /><circle cx="248" cy="114" r="4" /><circle cx="72" cy="290" r="5" />
+                    <circle cx="248" cy="610" r="5" /><circle cx="72" cy="786" r="4" /><circle cx="160" cy="836" r="5" />
+                </g>
+            </svg>
 		</aside>
 	</section>
 
@@ -32,12 +43,19 @@ const en = translations.en;
 			<p class="section-label" data-i18n="home.aboutLabel">{en.home.aboutLabel}</p>
 			<div>
 				<h2 class="section-title" id="about-title" data-i18n="home.aboutTitle">{en.home.aboutTitle}</h2>
-				<p class="section-copy" data-i18n="home.aboutBody">{en.home.aboutBody}</p>
+				<p class="section-copy" data-i18n="home.aboutBody">{formatExperienceText(en.home.aboutBody, 'en')}</p>
 			</div>
 		</div>
-		<ul class="skills-list" aria-label={en.home.skillsLabel}>
-			{profile.skills.map((skill) => <li>{skill}</li>)}
-		</ul>
+		<div class="capability-groups">
+			<section class="capability-group" aria-labelledby="technologies-title">
+				<h3 id="technologies-title" class="capability-label" data-i18n="home.technologiesLabel">{en.home.technologiesLabel}</h3>
+				<ul class="skills-list">{profile.technologies.map(skill => <li><span class="skill-marker" aria-hidden="true"></span><span>{skill}</span></li>)}</ul>
+			</section>
+			<section class="capability-group" aria-labelledby="industries-title">
+				<h3 id="industries-title" class="capability-label" data-i18n="home.industriesLabel">{en.home.industriesLabel}</h3>
+				<ul class="skills-list">{profile.industries.map(skill => <li><span class="skill-marker" aria-hidden="true"></span><span>{skill}</span></li>)}</ul>
+			</section>
+		</div>
 	</section>
 
 	<section class="content-section" id="work" aria-labelledby="work-title">

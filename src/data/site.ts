@@ -1,5 +1,18 @@
 export type PageName = 'home' | 'support';
 
+// The exact start day is unknown; count completed years from November 2020.
+export const careerStart = { year: 2020, month: 11 } as const;
+export function getExperienceYears(date = new Date()) {
+	return Math.max(0, date.getFullYear() - careerStart.year - (date.getMonth() + 1 < careerStart.month ? 1 : 0));
+}
+
+export function formatExperienceText(text: string, locale: 'en' | 'ru', date = new Date()) {
+	const years = getExperienceYears(date);
+	const category = new Intl.PluralRules(locale).select(years);
+	const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : (category === 'one' ? 'year' : 'years');
+	return text.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
+}
+
 export const profile = {
 	name: 'Aleksei Golubchenko',
 	role: 'Senior Software Engineer (.NET)',
@@ -7,7 +20,8 @@ export const profile = {
 	supportEmail: 'support@alexgolubchenko.com',
 	linkedin: 'https://www.linkedin.com/in/alex-golubchenko/',
 	youtube: 'https://www.youtube.com/@AlekseiGolubchenkoChannelEng/featured',
-	skills: ['Unity', 'C#', '.NET', 'Editor tooling', 'Runtime systems', 'Developer experience'],
+	technologies: ['Unity', 'C#', '.NET', 'Editor tooling', 'Runtime systems'],
+	industries: ['Fintech', 'Trading', 'Hospitality', 'Fiscal Solutions', 'Game Development'],
 } as const;
 
 export type Project = { id: string; number: string; cover: string; screenshots: { src: string; key: string }[]; video?: string };
@@ -37,6 +51,8 @@ export const translations = {
 		gallery: { previous: 'Previous', next: 'Next', original: 'Open original', cover: 'Cover', label: 'Project gallery' },
 		nav: { home: 'Home', work: 'Work', support: 'Support', language: 'Switch language' },
 		common: {
+			name: 'Aleksei Golubchenko',
+			homeLinkLabel: 'Aleksei Golubchenko — home',
 			status: 'Senior Software Engineer',
 			linkedin: 'LinkedIn',
 			youtube: 'YouTube',
@@ -49,12 +65,14 @@ export const translations = {
 			intro: 'I build software of varying complexity across .NET and Unity, with an emphasis on clean architecture, reusable systems, and long-term maintainability.',
 			primaryCta: 'View selected work',
 			secondaryCta: 'Get support',
-			indexLabel: 'Developer profile',
-			indexValue: '.NET · Unity · Distributed systems',
+			indexLabel: 'Specialization',
+			indexItems: ['.NET', 'Unity', 'Distributed systems'],
 			aboutLabel: 'Experience',
 			aboutTitle: 'Production engineering across systems and domains.',
-			aboutBody: 'I am a Senior Software Engineer with 5+ years of experience building and maintaining business-critical backend systems across fintech, fiscal compliance, hospitality, and trading. My work includes distributed systems, microservices, event-driven architecture, database optimization, real-time systems, and reusable Unity software.',
+			aboutBody: 'I am a Senior Software Engineer with over {experienceYears} {experienceUnit} of experience building and maintaining business-critical backend systems across fintech, fiscal compliance, hospitality, and trading. My work includes distributed systems, microservices, event-driven architecture, database optimization, real-time systems, and reusable Unity software.',
 			skillsLabel: 'Core capabilities',
+			technologiesLabel: 'Technologies',
+			industriesLabel: 'Industries',
 			workLabel: 'Selected work',
 			workTitle: 'Reusable systems for real development workflows.',
 			workIntro: 'Two Unity systems built for practical game-development workflows.',
@@ -146,6 +164,8 @@ export const translations = {
 		gallery: { previous: 'Назад', next: 'Вперёд', original: 'Открыть оригинал', cover: 'Обложка', label: 'Галерея проекта' },
 		nav: { home: 'Главная', work: 'Работы', support: 'Поддержка', language: 'Сменить язык' },
 		common: {
+			name: 'Алексей Голубченко',
+			homeLinkLabel: 'Алексей Голубченко — главная',
 			status: 'Senior Software Engineer',
 			linkedin: 'LinkedIn',
 			youtube: 'YouTube',
@@ -154,16 +174,18 @@ export const translations = {
 		},
 		home: {
 			eyebrow: 'Unity / C# / .NET',
-			title: 'Программное обеспечение, которое легко поддерживать.',
-			intro: 'Я разрабатываю ПО различной сложности на .NET и Unity, уделяя особое внимание чистой архитектуре, многократно используемым системам и долгосрочной поддерживаемости.',
+			title: 'Создаю ПО, которое легко поддерживать.',
+			intro: 'Я разрабатываю программное обеспечение различной сложности на .NET и Unity, уделяя особое внимание чистой архитектуре, многократно используемым системам и долгосрочной поддерживаемости.',
 			primaryCta: 'Смотреть работы',
 			secondaryCta: 'Получить поддержку',
-			indexLabel: 'Профиль разработчика',
-			indexValue: '.NET · Unity · Распределённые системы',
+			indexLabel: 'Специализация',
+			indexItems: ['.NET', 'Unity', 'Распределённые системы'],
 			aboutLabel: 'Опыт',
 			aboutTitle: 'Производственная разработка систем для разных отраслей.',
-			aboutBody: 'Я Senior Software Engineer с опытом более 5 лет в разработке и поддержке критически важных backend-систем для финтеха, фискального соответствия, гостиничного бизнеса и трейдинга. Моя специализация включает распределённые системы, микросервисы, событийную архитектуру, оптимизацию баз данных, системы реального времени и многократно используемое ПО для Unity.',
+			aboutBody: 'Я Senior Software Engineer с опытом более {experienceYears} {experienceUnit} в разработке и поддержке критически важных backend-систем для финтеха, фискального соответствия, гостиничного бизнеса и трейдинга. Моя специализация включает распределённые системы, микросервисы, событийную архитектуру, оптимизацию баз данных, системы реального времени и многократно используемое ПО для Unity.',
 			skillsLabel: 'Основные компетенции',
+			technologiesLabel: 'Технологии',
+			industriesLabel: 'Отрасли',
 			workLabel: 'Избранные работы',
 			workTitle: 'Многократно используемые системы для реальных рабочих процессов.',
 			workIntro: 'Две Unity-системы для практических задач разработки игр.',

@@ -4,7 +4,7 @@ import { profile } from '../data/site';
 
 <footer class="site-footer">
 	<div>
-		<p class="footer-name">{profile.name}</p>
+		<p class="footer-name" data-i18n="common.name">{profile.name}</p>
 		<p class="footer-line" data-i18n="common.footerLine">Unity development, engineered with care.</p>
 	</div>
 	<div class="footer-meta">
@@ -12,7 +12,7 @@ import { profile } from '../data/site';
 			<a href={profile.linkedin} target="_blank" rel="noreferrer" data-i18n="common.linkedin">LinkedIn</a>
 			<a href={profile.youtube} target="_blank" rel="noreferrer" data-i18n="common.youtube">YouTube</a>
 		</div>
-		<p>© <span data-current-year>{new Date().getFullYear()}</span> <span data-i18n="common.copyright">Alex Golubchenko</span></p>
+		<p>© <span data-current-year>{new Date().getFullYear()}</span> <span data-i18n="common.copyright">{profile.name}</span></p>
 	</div>
 </footer>
 
