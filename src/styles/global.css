@@ -398,6 +398,7 @@ html[lang="ru"] .support-hero h1 { line-height: 1.02; }
 .projects-grid { display: grid; margin-top: var(--work-spacing); border-top: 1px solid var(--ink); }
 .project-card { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 3rem; padding: 3rem 0; border-bottom: 1px solid var(--ink); }
 .project-copy, .project-media { min-width: 0; }
+.project-copy { display: flex; flex-direction: column; }
 .project-topline { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
 .project-status { color: var(--muted); }
 .project-card h3 { margin: 1.5rem 0 1rem; font: 500 clamp(2rem, 3.5vw, 3rem)/1.1 var(--serif); letter-spacing: -.035em; overflow-wrap: anywhere; }
@@ -426,7 +427,7 @@ html.gallery-modal-open { overflow: hidden; }
 .gallery-lightbox::backdrop { background: rgba(12, 14, 11, .94); }
 .lightbox-panel { width: min(100%, 1600px); height: 100%; margin: auto; display: flex; flex-direction: column; gap: .75rem; pointer-events: none; }
 .lightbox-close { align-self: flex-end; flex: 0 0 44px; width: 44px; }
-.lightbox-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; touch-action: pan-y pinch-zoom; }
+.lightbox-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
 .lightbox-stage img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; pointer-events: auto; }
 .lightbox-caption { text-align: center; font-size: .85rem; }
 .lightbox-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: min(100%, 440px); margin-inline: auto; }
@@ -450,18 +451,25 @@ html.gallery-modal-open { overflow: hidden; }
 	z-index: 1;
 	display: inline-flex;
 	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	margin-top: 1rem;
-	padding-top: 1rem;
-	border-top: 1px solid var(--line);
-	font: 700 0.72rem/1.3 var(--mono);
+	justify-content: center;
+	align-self: center;
+	gap: .4rem;
+	width: min(100%, 320px);
+	min-height: 52px;
+	margin-block: auto;
+	padding: .85rem 1.5rem;
+	border: 1px solid var(--ink);
+	background: var(--signal);
+	font: 600 1rem/1.5 var(--sans);
 	text-decoration: none;
-	text-transform: uppercase;
+	transition: background 160ms;
 }
 
-.project-link::after { content: "↗"; color: var(--signal-dark); }
-.project-link:hover { color: var(--signal-dark); }
+.project-link::after { content: "↗"; color: var(--ink); }
+.project-link:hover { background: var(--signal-dark); }
+@media (max-width: 760px) {
+ .project-link { margin-block: 1.5rem 0; }
+}
 
 .support-callout {
 	display: grid;

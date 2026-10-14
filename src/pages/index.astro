@@ -77,9 +77,9 @@ const en = translations.en;
  <p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
  <ul class="project-features" data-i18n-list={`home.projects.${index}.features`}>{copy.features.map(feature => <li data-list-item>{feature}</li>)}</ul>
  <p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
+ {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer" data-i18n={`home.projects.${index}.cta`}>{copy.cta}</a>}
  </div>
  <div class="project-media"><ProjectGallery project={project} index={index} />
- {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer" data-i18n={`home.projects.${index}.cta`}>{copy.cta}</a>}
  </div></article>;
  })}
  </div>

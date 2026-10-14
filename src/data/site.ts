@@ -87,7 +87,7 @@ export const translations = {
       "View selected lobby details"
     ],
     "meta": "Unity · C# · Steamworks",
-    "cta": "Watch the game-version demo",
+    "cta": "Watch demo",
     "coverAlt": "Lobby System cover with the lobby browser interface on a light background",
     "gameScreenshot": "Original game version — Server Observer lobby browser",
     "gameScreenshotAlt": "Game-version lobby browser with player counts and ping values.",
@@ -201,7 +201,7 @@ export const translations = {
       "Просмотр параметров выбранного лобби"
     ],
     "meta": "Unity · C# · Steamworks",
-    "cta": "Демонстрация версии для игры",
+    "cta": "Смотреть демо",
     "coverAlt": "Обложка Lobby System с интерфейсом браузера лобби на светлом фоне",
     "gameScreenshot": "Исходная версия для игры — браузер лобби Server Observer",
     "gameScreenshotAlt": "Браузер лобби игровой версии с количеством игроков и показателями пинга.",
