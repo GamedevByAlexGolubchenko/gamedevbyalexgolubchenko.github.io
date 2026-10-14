@@ -48,7 +48,7 @@ export const translations = {
 			supportTitle: 'Support — Aleksei Golubchenko',
 			supportDescription: 'Product support and contact information for Unity tools by Aleksei Golubchenko.',
 		},
-		gallery: { previous: 'Previous', next: 'Next', original: 'Open original', cover: 'Cover', label: 'Project gallery' },
+		gallery: { previous: 'Previous', next: 'Next', open: 'Expand image', close: 'Close gallery', cover: 'Cover', label: 'Project gallery' },
 		nav: { home: 'Home', work: 'Work', support: 'Support', language: 'Switch language' },
 		common: {
 			name: 'Aleksei Golubchenko',
@@ -73,18 +73,18 @@ export const translations = {
 			skillsLabel: 'Core capabilities',
 			technologiesLabel: 'Technologies',
 			industriesLabel: 'Industries',
-			workLabel: 'Selected work',
-			workTitle: 'Reusable systems for real development workflows.',
-			workIntro: 'Two Unity systems built for practical game-development workflows.',
+			workLabel: 'Projects',
+			workTitle: 'Tools for Unity',
+			workIntro: 'Multiplayer lobbies, localization, and input rebinding.',
 			projects: [
   {
     "status": "Preparing for publication",
     "title": "Lobby System",
-    "body": "A Unity lobby system used in my own game and adapted for release as a reusable asset with a more polished, flexibly configurable UI.",
+    "body": "A Unity lobby system used in my own game. I’m developing a standalone asset based on it with an updated interface.",
     "features": [
       "Lobby discovery and filtering",
       "Validation and real-time updates",
-      "Configurable UI for the asset edition"
+      "View selected lobby details"
     ],
     "meta": "Unity · C# · Steamworks",
     "cta": "Watch the game-version demo",
@@ -103,12 +103,13 @@ export const translations = {
   {
     "status": "Project",
     "title": "Localization & Input Rebinding",
-    "body": "A Unity project bringing together localization and input rebinding.",
+    "body": "A settings system used in my Unity game. It brings together interface localization, input rebinding, and graphics and audio settings.",
     "features": [
       "Localization",
-      "Input rebinding"
+      "Input rebinding",
+      "Graphics and audio settings"
     ],
-    "meta": "Unity",
+    "meta": "Unity · C#",
     "cta": "Watch demonstration",
     "coverAlt": "Localization & Input Rebinding cover with controls, Spanish localization, graphics and audio interfaces on a light background",
     "gameScreenshot": "",
@@ -161,7 +162,7 @@ export const translations = {
 			supportTitle: 'Поддержка — Алексей Голубченко',
 			supportDescription: 'Поддержка Unity-инструментов и контактная информация Алексея Голубченко.',
 		},
-		gallery: { previous: 'Назад', next: 'Вперёд', original: 'Открыть оригинал', cover: 'Обложка', label: 'Галерея проекта' },
+		gallery: { previous: 'Назад', next: 'Вперёд', open: 'Увеличить изображение', close: 'Закрыть галерею', cover: 'Обложка', label: 'Галерея проекта' },
 		nav: { home: 'Главная', work: 'Работы', support: 'Поддержка', language: 'Сменить язык' },
 		common: {
 			name: 'Алексей Голубченко',
@@ -186,18 +187,18 @@ export const translations = {
 			skillsLabel: 'Основные компетенции',
 			technologiesLabel: 'Технологии',
 			industriesLabel: 'Отрасли',
-			workLabel: 'Избранные работы',
-			workTitle: 'Многократно используемые системы для реальных рабочих процессов.',
-			workIntro: 'Две Unity-системы для практических задач разработки игр.',
+			workLabel: 'Проекты',
+			workTitle: 'Инструменты для Unity',
+			workIntro: 'Мультиплеерное лобби, локализация и переназначение управления.',
 			projects: [
   {
     "status": "Готовится к публикации",
     "title": "Lobby System",
-    "body": "Система лобби для Unity, используемая в моей игре и адаптированная для выпуска в виде ассета с более выразительным и гибко настраиваемым UI.",
+    "body": "Система лобби для Unity, используемая в моей игре. На её основе готовлю отдельный ассет с обновлённым интерфейсом.",
     "features": [
       "Поиск и фильтрация лобби",
       "Валидация и обновления в реальном времени",
-      "Настраиваемый UI в версии ассета"
+      "Просмотр параметров выбранного лобби"
     ],
     "meta": "Unity · C# · Steamworks",
     "cta": "Демонстрация версии для игры",
@@ -216,12 +217,13 @@ export const translations = {
   {
     "status": "Проект",
     "title": "Localization & Input Rebinding",
-    "body": "Unity-проект, объединяющий локализацию и переназначение управления.",
+    "body": "Система настроек для Unity, используемая в моей игре. Объединяет локализацию интерфейса, переназначение управления, настройки графики и звука.",
     "features": [
       "Локализация",
-      "Переназначение управления"
+      "Переназначение управления",
+      "Настройки графики и звука"
     ],
-    "meta": "Unity",
+    "meta": "Unity · C#",
     "cta": "Смотреть демонстрацию",
     "coverAlt": "Обложка Localization & Input Rebinding с интерфейсами управления, испанской локализации, графики и звука на светлом фоне",
     "gameScreenshot": "",
