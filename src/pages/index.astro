@@ -77,7 +77,10 @@ const en = translations.en;
  <p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
  <ul class="project-features" data-i18n-list={`home.projects.${index}.features`}>{copy.features.map(feature => <li data-list-item>{feature}</li>)}</ul>
  <p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
- {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer" data-i18n={`home.projects.${index}.cta`}>{copy.cta}</a>}
+ {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer">
+ <span data-i18n={`home.projects.${index}.cta`}>{copy.cta}</span>
+ <svg class="project-link-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
+ </a>}
  </div>
  <div class="project-media"><ProjectGallery project={project} index={index} />
  </div></article>;
@@ -85,12 +88,14 @@ const en = translations.en;
  </div>
 	</section>
 
-	<section class="support-callout" aria-labelledby="support-title">
-		<div>
+	<section class="content-section home-support-callout" aria-labelledby="support-title">
+		<div class="section-heading">
 			<p class="section-label" data-i18n="home.supportLabel">{en.home.supportLabel}</p>
-			<h2 id="support-title" data-i18n="home.supportTitle">{en.home.supportTitle}</h2>
-			<p data-i18n="home.supportBody">{en.home.supportBody}</p>
+			<div>
+				<h2 class="section-title" id="support-title" data-i18n="home.supportTitle">{en.home.supportTitle}</h2>
+				<p class="section-copy" data-i18n="home.supportBody">{en.home.supportBody}</p>
+				<a class="button-link" href="/support/" data-i18n="home.supportCta">{en.home.supportCta}</a>
+			</div>
 		</div>
-		<a class="button-link" href="/support/" data-i18n="home.supportCta">{en.home.supportCta}</a>
 	</section>
 </BaseLayout>

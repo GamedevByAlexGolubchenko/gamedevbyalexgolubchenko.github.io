@@ -12,24 +12,18 @@ const en = translations.en;
 			<h1 data-i18n="support.title">{en.support.title}</h1>
 			<p class="hero-intro" data-i18n="support.intro">{en.support.intro}</p>
 		</div>
-		<aside class="support-aside">
-			<span class="meta-chip" data-i18n="support.availabilityLabel">{en.support.availabilityLabel}</span>
+		<aside class="support-aside" aria-labelledby="support-contact-title">
+			<h2 class="section-label" id="support-contact-title" data-i18n="support.availabilityLabel">{en.support.availabilityLabel}</h2>
 			<p data-i18n="support.availabilityBody">{en.support.availabilityBody}</p>
+			<p class="support-email">{profile.supportEmail}</p>
+			<a class="button-link" href={`mailto:${profile.supportEmail}`}>
+				<span data-i18n="support.emailCta">{en.support.emailCta}</span>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
+			</a>
 		</aside>
 	</section>
 
-	<section class="contact-panel" aria-labelledby="support-contact-title">
-		<div>
-			<h2 id="support-contact-title" data-i18n="support.noticeTitle">{en.support.noticeTitle}</h2>
-			<p data-i18n="support.noticeBody">{en.support.noticeBody}</p>
-		</div>
-		<a class="button-link email-link" href={`mailto:${profile.supportEmail}`}>
-			<span data-i18n="support.emailCta">{en.support.emailCta}</span>
-			<span class="email-address">{profile.supportEmail}</span>
-		</a>
-	</section>
-
-	<section class="content-section" aria-labelledby="process-title">
+	<section class="content-section support-section" aria-labelledby="process-title">
 		<div class="section-heading">
 			<p class="section-label" data-i18n="support.processLabel">{en.support.processLabel}</p>
 			<h2 class="section-title" id="process-title" data-i18n="support.processTitle">{en.support.processTitle}</h2>
@@ -50,7 +44,7 @@ const en = translations.en;
 		</div>
 	</section>
 
-	<section class="content-section" aria-labelledby="scope-title">
+	<section class="content-section support-section" aria-labelledby="scope-title">
 		<div class="section-heading">
 			<p class="section-label" data-i18n="support.scopeLabel">{en.support.scopeLabel}</p>
 			<div>
@@ -62,14 +56,16 @@ const en = translations.en;
 		</div>
 	</section>
 
-	<section class="support-callout" aria-labelledby="contact-title">
-		<div>
+	<section class="content-section support-section support-contact" aria-labelledby="contact-title">
+		<div class="section-heading">
 			<p class="section-label" data-i18n="support.contactLabel">{en.support.contactLabel}</p>
-			<h2 id="contact-title" data-i18n="support.contactTitle">{en.support.contactTitle}</h2>
-			<p data-i18n="support.contactBody">{en.support.contactBody}</p>
+			<div>
+				<h2 class="section-title" id="contact-title" data-i18n="support.contactTitle">{en.support.contactTitle}</h2>
+				<p class="section-copy" data-i18n="support.contactBody">{en.support.contactBody}</p>
+				<a class="button-link" href={`mailto:${profile.contactEmail}`} data-i18n="support.contactCta">
+					{en.support.contactCta}
+				</a>
+			</div>
 		</div>
-		<a class="button-link" href={`mailto:${profile.contactEmail}`} data-i18n="support.contactCta">
-			{en.support.contactCta}
-		</a>
 	</section>
 </BaseLayout>

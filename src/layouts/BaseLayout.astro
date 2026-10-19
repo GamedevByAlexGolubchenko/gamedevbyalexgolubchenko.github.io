@@ -47,7 +47,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<title data-i18n={`meta.${page}Title`}>{title}</title>
 	</head>
 	<body data-page={page}>
-		<a class="skip-link" href="#main">Skip to content</a>
 		<div class="page-shell">
 			<SiteHeader page={page} />
 			<main id="main"><slot /></main>
