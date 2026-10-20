@@ -1,0 +1,48 @@
+---
+import { translations } from '../data/site';
+interface Props { email: string; label: string; labelKey: string }
+const { email, label, labelKey } = Astro.props;
+const copy = translations.en.support;
+---
+
+<div class="email-contact" data-email-contact>
+	<p class="email-address">{email}</p>
+	<div class="action-row">
+		<a class="button-link" href={`mailto:${email}`} data-i18n={labelKey}>{label}</a>
+		<button class="button-link secondary copy-email" type="button" data-copy-email={email} hidden>
+			<span data-i18n="support.copyEmailCta">{copy.copyEmailCta}</span>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
+		</button>
+	</div>
+	<p class="copy-email-status" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+	import { translations } from '../data/site';
+	document.querySelectorAll<HTMLElement>('[data-email-contact]').forEach(contact => {
+		const button = contact.querySelector<HTMLButtonElement>('[data-copy-email]');
+		const status = contact.querySelector<HTMLElement>('.copy-email-status');
+		if (!button || !status || !navigator.clipboard?.writeText) return;
+		button.hidden = false;
+		let resetTimer: ReturnType<typeof setTimeout>;
+		button.addEventListener('click', async () => {
+			button.disabled = true;
+			clearTimeout(resetTimer);
+			let key: 'copyEmailSuccess' | 'copyEmailError' = 'copyEmailSuccess';
+			try {
+				await navigator.clipboard.writeText(button.dataset.copyEmail!);
+			} catch {
+				key = 'copyEmailError';
+			} finally {
+				const locale = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+				status.dataset.i18n = `support.${key}`;
+				status.textContent = translations[locale].support[key];
+				button.disabled = false;
+				resetTimer = setTimeout(() => {
+					status.textContent = '';
+					delete status.dataset.i18n;
+				}, 5000);
+			}
+		});
+	});
+</script>

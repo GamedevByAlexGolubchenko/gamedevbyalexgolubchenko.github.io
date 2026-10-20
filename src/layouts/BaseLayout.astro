@@ -3,6 +3,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { translations, careerStart, type PageName } from '../data/site';
 import '../styles/global.css';
+import '../styles/theme.css';
 
 interface Props {
 	page: PageName;
@@ -15,7 +16,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-design="engine">
 	<head>
 		<meta charset="UTF-8" />
 		<script is:inline>
@@ -34,9 +35,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			html[data-locale-pending] body { visibility: hidden; }
 		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="theme-color" content="#f2f0e9" />
+		<meta name="theme-color" content="#0B1020" />
 		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
 		<link rel="canonical" href={canonicalURL} />
+		<link rel="preload" href="/fonts/inter/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={canonicalURL} />
@@ -71,31 +73,31 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				return value.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
 			};
 
-			const applyLocale = (locale) => {
+			const applyLocale = (locale, scope = document) => {
 				const dictionary = dictionaries[locale] || dictionaries.en;
 				document.documentElement.lang = locale;
 
-				document.querySelectorAll('[data-i18n-aria]').forEach((element) => {
+				scope.querySelectorAll('[data-i18n-aria]').forEach((element) => {
 					const value = getValue(dictionary, element.dataset.i18nAria);
 					if (typeof value === 'string') element.setAttribute('aria-label', value);
 				});
 
-				document.querySelectorAll('[data-i18n]').forEach((element) => {
+				scope.querySelectorAll('[data-i18n]').forEach((element) => {
 					const value = getValue(dictionary, element.dataset.i18n);
 					if (typeof value === 'string') element.textContent = value;
 				});
 
-				document.querySelectorAll('[data-i18n-content]').forEach((element) => {
+				scope.querySelectorAll('[data-i18n-content]').forEach((element) => {
 					const value = getValue(dictionary, element.dataset.i18nContent);
 					if (typeof value === 'string') element.setAttribute('content', value);
 				});
 
-				document.querySelectorAll('[data-i18n-alt]').forEach((element) => {
+				scope.querySelectorAll('[data-i18n-alt]').forEach((element) => {
 					const value = getValue(dictionary, element.dataset.i18nAlt);
 					if (typeof value === 'string') element.setAttribute('alt', value);
 				});
 
-				document.querySelectorAll('[data-i18n-list]').forEach((list) => {
+				scope.querySelectorAll('[data-i18n-list]').forEach((list) => {
 					const values = getValue(dictionary, list.dataset.i18nList);
 					if (!Array.isArray(values)) return;
 					list.querySelectorAll('[data-list-item]').forEach((item, index) => {
@@ -103,11 +105,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					});
 				});
 
-				document.querySelectorAll('[data-locale-option]').forEach((option) => {
+				scope.querySelectorAll('[data-locale-option]').forEach((option) => {
 					option.classList.toggle('active', option.dataset.localeOption === locale);
 				});
 
-				const toggle = document.querySelector('[data-language-toggle]');
+				const toggle = scope.querySelector('[data-language-toggle]');
 				if (toggle) {
 					toggle.setAttribute('aria-label', dictionary.nav.language);
 					toggle.dataset.locale = locale;
@@ -115,12 +117,61 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 				const page = document.body.dataset.page;
 				const localizedTitle = getValue(dictionary, `meta.${page}Title`);
-				if (typeof localizedTitle === 'string') document.title = localizedTitle;
+				if (scope === document && typeof localizedTitle === 'string') document.title = localizedTitle;
 			};
 
 			const initialLocale = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+			// Measure both translations off screen. Text gets room to wrap without
+			// moving the artwork, cards, or following sections when the locale changes.
+			const stableSelector = 'h1[data-i18n], h2[data-i18n], h3[data-i18n], p[data-i18n], .project-features li, .skills-list li, .hero-stack-description, .capability-label, .button-link, .project-link, .primary-nav a';
+			const reserveTranslationSpace = () => {
+				const shell = document.querySelector('.page-shell');
+				const locale = document.documentElement.lang;
+				const targets = [...shell.querySelectorAll(stableSelector)];
+				const probe = shell.cloneNode(true);
+				probe.setAttribute('aria-hidden', 'true');
+				probe.inert = true;
+				probe.classList.add('translation-measure');
+				probe.style.width = `${shell.getBoundingClientRect().width}px`;
+				const samples = [...probe.querySelectorAll(stableSelector)];
+				samples.forEach(element => {
+					element.style.removeProperty('min-height');
+					element.style.removeProperty('min-width');
+				});
+				document.body.append(probe);
+				const heights = targets.map(() => 0);
+				const widths = targets.map(() => 0);
+				try {
+					for (const language of Object.keys(dictionaries)) {
+						applyLocale(language, probe);
+						samples.forEach((element, index) => {
+							const rect = element.getBoundingClientRect();
+							heights[index] = Math.max(heights[index], rect.height);
+							if (element.matches('.primary-nav a, .action-row .button-link')) widths[index] = Math.max(widths[index], rect.width);
+						});
+					}
+				} finally {
+					probe.remove();
+					document.documentElement.lang = locale;
+				}
+				targets.forEach((element, index) => {
+					if (heights[index]) element.style.minHeight = `${Math.ceil(heights[index])}px`;
+					if (widths[index]) element.style.minWidth = `${Math.ceil(widths[index])}px`;
+				});
+			};
+			reserveTranslationSpace();
 			applyLocale(initialLocale);
 			document.documentElement.removeAttribute('data-locale-pending');
+			let translationFrame;
+			let translationWidth = document.documentElement.clientWidth;
+			window.addEventListener('resize', () => {
+				const width = document.documentElement.clientWidth;
+				if (width === translationWidth) return;
+				translationWidth = width;
+				cancelAnimationFrame(translationFrame);
+				translationFrame = requestAnimationFrame(reserveTranslationSpace);
+			}, { passive: true });
+			document.fonts.ready.then(reserveTranslationSpace);
 
 			const workSection = document.querySelector('#work');
 			const syncNavigation = () => {

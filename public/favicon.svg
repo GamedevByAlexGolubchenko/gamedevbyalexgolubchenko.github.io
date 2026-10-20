@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Geometric A monogram">
-	<circle cx="64" cy="64" r="58" fill="#171914"/>
-	<path d="M24 99 56 27h17L44 99Z" fill="#c7f12f"/>
-	<path d="m70 27 34 72H83L61 49Z" fill="#f2f0e9"/>
-	<path d="M47 75h37l8 16H40Z" fill="#c7f12f"/>
-	<circle cx="99" cy="29" r="5" fill="#c7f12f"/>
+	<circle cx="64" cy="64" r="58" fill="#0B1020"/>
+	<path d="M24 99 56 27h17L44 99Z" fill="#E87943"/>
+	<path d="m70 27 34 72H83L61 49Z" fill="#EDF3F8"/>
+	<path d="M47 75h37l8 16H40Z" fill="#E87943"/>
+	<circle cx="99" cy="29" r="5" fill="#E87943"/>
 </svg>

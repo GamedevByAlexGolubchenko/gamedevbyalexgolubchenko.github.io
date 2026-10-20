@@ -1,34 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EmailContact from '../components/EmailContact.astro';
 import { profile, translations } from '../data/site';
 
 const en = translations.en;
 ---
 
 <BaseLayout page="support" title={en.meta.supportTitle} description={en.meta.supportDescription}>
-	<section class="support-hero">
+	<section class="support-overview" aria-labelledby="support-title"><div class="support-hero">
 		<div class="support-hero-main">
 			<p class="eyebrow" data-i18n="support.eyebrow">{en.support.eyebrow}</p>
-			<h1 data-i18n="support.title">{en.support.title}</h1>
+			<h1 id="support-title" data-i18n="support.title">{en.support.title}</h1>
 			<p class="hero-intro" data-i18n="support.intro">{en.support.intro}</p>
 		</div>
 		<aside class="support-aside" aria-labelledby="support-contact-title">
 			<h2 class="section-label" id="support-contact-title" data-i18n="support.availabilityLabel">{en.support.availabilityLabel}</h2>
 			<p data-i18n="support.availabilityBody">{en.support.availabilityBody}</p>
-			<p class="support-email">{profile.supportEmail}</p>
-			<a class="button-link" href={`mailto:${profile.supportEmail}`}>
-				<span data-i18n="support.emailCta">{en.support.emailCta}</span>
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
-			</a>
+			<EmailContact email={profile.supportEmail} label={en.support.emailCta} labelKey="support.emailCta" />
 		</aside>
-	</section>
+	</div>
 
-	<section class="content-section support-section" aria-labelledby="process-title">
+	<section class="support-section support-subsection" aria-labelledby="process-title">
 		<div class="section-heading">
 			<p class="section-label" data-i18n="support.processLabel">{en.support.processLabel}</p>
 			<h2 class="section-title" id="process-title" data-i18n="support.processTitle">{en.support.processTitle}</h2>
 		</div>
-		<div class="process-grid">
+		<div class="process-grid section-details">
 			<article class="process-item">
 				<h3 data-i18n="support.stepOneTitle">{en.support.stepOneTitle}</h3>
 				<p data-i18n="support.stepOneBody">{en.support.stepOneBody}</p>
@@ -44,16 +41,18 @@ const en = translations.en;
 		</div>
 	</section>
 
-	<section class="content-section support-section" aria-labelledby="scope-title">
+	<section class="support-section support-subsection" aria-labelledby="scope-title">
 		<div class="section-heading">
 			<p class="section-label" data-i18n="support.scopeLabel">{en.support.scopeLabel}</p>
 			<div>
 				<h2 class="section-title" id="scope-title" data-i18n="support.scopeTitle">{en.support.scopeTitle}</h2>
-				<ul class="scope-list" data-i18n-list="support.scopeItems">
-					{en.support.scopeItems.map((item) => <li data-list-item>{item}</li>)}
+				<ul class="skills-list support-scope">
+					{en.support.scopeItems.map((item, index) => <li><span class="skill-marker" aria-hidden="true"></span><span data-i18n={`support.scopeItems.${index}`}>{item}</span></li>)}
 				</ul>
 			</div>
 		</div>
+	</section>
+
 	</section>
 
 	<section class="content-section support-section support-contact" aria-labelledby="contact-title">
@@ -62,9 +61,7 @@ const en = translations.en;
 			<div>
 				<h2 class="section-title" id="contact-title" data-i18n="support.contactTitle">{en.support.contactTitle}</h2>
 				<p class="section-copy" data-i18n="support.contactBody">{en.support.contactBody}</p>
-				<a class="button-link" href={`mailto:${profile.contactEmail}`} data-i18n="support.contactCta">
-					{en.support.contactCta}
-				</a>
+				<EmailContact email={profile.contactEmail} label={en.support.contactCta} labelKey="support.contactCta" />
 			</div>
 		</div>
 	</section>
