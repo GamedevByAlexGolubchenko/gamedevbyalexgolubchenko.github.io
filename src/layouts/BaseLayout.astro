@@ -246,8 +246,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			document.addEventListener('keydown', event => {
 				if (event.key === 'Escape') closeLanguagePicker(true);
 			});
-			languagePicker?.addEventListener('focusout', event => {
-				if (!languagePicker.contains(event.relatedTarget)) closeLanguagePicker();
+			// Safari may blur the trigger without focusing a tapped option.
+			// Wait for actual outside focus so the option can receive its click.
+			document.addEventListener('focusin', event => {
+				if (!languagePicker?.contains(event.target)) closeLanguagePicker();
 			});
 		</script>
 	</body>
