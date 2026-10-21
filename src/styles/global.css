@@ -60,6 +60,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 	transition: none !important;
 	animation: none !important;
 }
+.translation-space-centered {
+	display: flex;
+	align-items: center;
+}
+.translation-reserved { min-height: var(--translation-min-height, 0px); }
 .primary-nav a { display: inline-block; text-align: center; }
 
 .site-header {
@@ -115,7 +120,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 	content: "";
 }
 
-.primary-nav a:hover::after, .primary-nav a.active::after {
+.primary-nav a.active::after {
 	transform: scaleX(1);
 	transform-origin: left;
 }
@@ -207,7 +212,10 @@ html[lang="ru"] .hero h1 {
 }
 
 .button-link::after { content: "↗"; }
-.button-link:hover { background: var(--signal); color: var(--ink); transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) {
+ .button-link:hover { background: var(--signal); color: var(--ink); transform: translateY(-2px); }
+}
+.button-link:active { background: var(--signal); color: var(--ink); transform: translateY(-2px); }
 .button-link.secondary { background: transparent; color: var(--ink); }
 
 .hero-index {
@@ -301,9 +309,7 @@ html[lang="ru"] .hero h1 {
 }
 
 #work {
-	padding-top: var(--work-spacing);
-	padding-bottom: 0;
-	border-bottom: 0;
+	padding-block: var(--work-spacing);
 }
 
 #work .section-title, .home-support-callout .section-title, .support-section .section-title {
@@ -361,9 +367,10 @@ html[lang="ru"] .hero h1 {
 	transition: background 180ms ease, border-color 180ms ease;
 }
 .skill-marker { width: 0.4rem; height: 0.4rem; flex: 0 0 auto; background: var(--signal-dark); }
-@media (hover: hover) {
-	.skills-list li:hover { background: rgba(199, 241, 47, 0.12); border-color: var(--signal-dark); }
+@media (hover: hover) and (pointer: fine) {
+ .skills-list li:hover { background: rgba(199, 241, 47, 0.12); border-color: var(--signal-dark); }
 }
+.skills-list li:active { background: rgba(199, 241, 47, 0.12); border-color: var(--signal-dark); }
 .meta-chip {
 	padding: 0.62rem 0.8rem;
 	border: 1px solid var(--line);
@@ -391,7 +398,10 @@ html[lang="ru"] .hero h1 {
 .gallery-controls { display: flex; align-items: center; justify-content: space-between; gap: .5rem; border-block: 1px solid var(--line); }
 .gallery-controls button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 44px; background: transparent; color: var(--ink); border: 0; padding: .6rem .8rem; cursor: pointer; font: inherit; }
 .gallery-controls button svg { display: block; flex-shrink: 0; }
-.gallery-controls button:hover { background: var(--signal); }
+@media (hover: hover) and (pointer: fine) {
+ .gallery-controls button:hover { background: var(--signal); }
+}
+.gallery-controls button:active { background: var(--signal); }
 .gallery-controls output { font: .75rem var(--mono); }
 .gallery-controls, .lightbox-controls, .gallery-open, .lightbox-close {
 	-webkit-user-select: none;
@@ -399,7 +409,10 @@ html[lang="ru"] .hero h1 {
 }
 .gallery-open { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; background: transparent; color: var(--muted); border: 0; cursor: pointer; transition: color 160ms; }
 .gallery-open svg { display: block; pointer-events: none; }
-.gallery-open:hover { color: var(--signal-dark); }
+@media (hover: hover) and (pointer: fine) {
+ .gallery-open:hover { color: var(--signal-dark); }
+}
+.gallery-open:active { color: var(--signal-dark); }
 .gallery-open:focus-visible { outline-offset: 3px; }
 html.gallery-modal-open { overflow: hidden; }
 .gallery-lightbox { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: clamp(1rem, 3vw, 3rem); border: 0; background: transparent; color: var(--paper); }
@@ -414,7 +427,10 @@ html.gallery-modal-open { overflow: hidden; }
 .gallery-lightbox button { display: grid; place-items: center; padding: 0; pointer-events: auto; min-width: 44px; min-height: 44px; border: 1px solid rgba(242, 240, 233, .35); color: inherit; background: transparent; cursor: pointer; font: 1.7rem var(--sans); }
 .lightbox-controls button { width: 44px; height: 44px; }
 .gallery-lightbox button svg { display: block; }
-.gallery-lightbox button:hover { color: var(--ink); background: var(--signal); }
+@media (hover: hover) and (pointer: fine) {
+ .gallery-lightbox button:hover { color: var(--ink); background: var(--signal); }
+}
+.gallery-lightbox button:active { color: var(--ink); background: var(--signal); }
 .gallery-lightbox :focus-visible { outline-color: var(--signal); }
 @media (prefers-reduced-motion: no-preference) {
  .gallery-lightbox[open] .lightbox-panel { animation: gallery-reveal 180ms ease-out; }
@@ -445,7 +461,10 @@ html.gallery-modal-open { overflow: hidden; }
 }
 
 .project-link-icon { display: block; flex-shrink: 0; color: var(--ink); }
-.project-link:hover { background: var(--signal-dark); }
+@media (hover: hover) and (pointer: fine) {
+ .project-link:hover { background: var(--signal-dark); }
+}
+.project-link:active { background: var(--signal-dark); }
 @media (max-width: 760px) {
  .project-link { margin-block: 1.5rem 0; }
 }
@@ -513,7 +532,10 @@ html[lang="ru"] .support-hero h1 {
 .support-aside .button-link svg { flex-shrink: 0; }
 .copy-email { cursor: pointer; }
 .support-aside .copy-email[hidden] { display: none; }
-.copy-email:hover { background: var(--signal); }
+@media (hover: hover) and (pointer: fine) {
+ .copy-email:hover { background: var(--signal); }
+}
+.copy-email:active { background: var(--signal); }
 .copy-email:disabled { cursor: wait; opacity: .65; }
 .copy-email-status { min-height: 2.5rem; margin: 1rem 0 0; color: var(--muted); font-size: .78rem; }
 .support-aside .copy-email-status { margin-top: 1rem; font-size: .78rem; }
@@ -608,9 +630,7 @@ html[lang="ru"] .support-hero h1 {
 	.primary-nav { gap: 0.5rem; font-size: 0.68rem; }
 }
 
-@media (hover: none) {
-	.primary-nav a:hover:not(.active)::after { transform: scaleX(0); }
-}
+
 
 @media (prefers-reduced-motion: reduce) {
 	html { scroll-behavior: auto; }
@@ -620,3 +640,7 @@ html[lang="ru"] .support-hero h1 {
 		animation-iteration-count: 1 !important;
 	}
 }
+@media (hover: hover) and (pointer: fine) {
+ .primary-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+}
+.primary-nav a:active::after { transform: scaleX(1); transform-origin: left; }

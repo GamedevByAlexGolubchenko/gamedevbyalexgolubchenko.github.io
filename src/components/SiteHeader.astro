@@ -1,5 +1,5 @@
 ---
-import { profile } from '../data/site';
+import { profile, locales } from '../data/site';
 
 interface Props {
 	page: 'home' | 'support';
@@ -20,9 +20,22 @@ const { page } = Astro.props;
 		<a href="/support/" data-nav="support" class:list={{ active: page === 'support' }} aria-current={page === 'support' ? 'page' : undefined} data-i18n="nav.support">Support</a>
 	</nav>
 
-	<button class="language-toggle" type="button" data-language-toggle aria-label="Switch language">
-		<span data-locale-option="en">EN</span>
-		<span class="language-divider" aria-hidden="true">/</span>
-		<span data-locale-option="ru">RU</span>
-	</button>
+	<details class="language-picker" data-language-picker>
+		<summary class="language-toggle" data-language-toggle aria-label="Switch language">
+			<span class="language-current-flag" data-current-flag aria-hidden="true"></span>
+			<span data-current-language>English</span>
+			<svg class="language-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+		</summary>
+		<div class="language-options">
+			{locales.map(locale => <button type="button" class="language-option" data-locale-option={locale.code} lang={locale.code} aria-pressed={locale.code === 'en'}>
+				<svg class="language-flag" width="24" height="16" viewBox="0 0 30 20" aria-hidden="true">
+					{locale.flag === 'ru' && <><path fill="#fff" d="M0 0h30v20H0z"/><path fill="#2246a0" d="M0 6.67h30v6.66H0z"/><path fill="#cf343a" d="M0 13.33h30V20H0z"/></>}
+					{locale.flag === 'br' && <><path fill="#229e45" d="M0 0h30v20H0z"/><path fill="#ffdf40" d="m15 2 13 8-13 8L2 10z"/><circle fill="#24448c" cx="15" cy="10" r="5"/><path d="M10.5 8.5q5 0 9 4" stroke="#fff" stroke-width="1" fill="none"/></>}
+					{locale.flag === 'es' && <><path fill="#b92535" d="M0 0h30v20H0z"/><path fill="#f5c844" d="M0 5h30v10H0z"/><path fill="#b92535" d="M8 8h3v5H8z"/></>}
+					{locale.flag === 'us' && <><path fill="#fff" d="M0 0h30v20H0z"/><path stroke="#bd3546" stroke-width="1.54" d="M0 .77h30M0 3.85h30M0 6.92h30M0 10h30M0 13.08h30M0 16.15h30M0 19.23h30"/><path fill="#294577" d="M0 0h13v10.77H0z"/><path fill="#fff" d="M2 2h1v1H2zm4 0h1v1H6zm4 0h1v1h-1zM4 5h1v1H4zm4 0h1v1H8zM2 8h1v1H2zm4 0h1v1H6zm4 0h1v1h-1z"/></>}
+				</svg>
+				<span data-language-name>{locale.label}</span><span class="language-check" aria-hidden="true">✓</span>
+			</button>)}
+		</div>
+	</details>
 </header>

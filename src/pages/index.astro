@@ -1,7 +1,7 @@
 ---
 import ProjectGallery from '../components/ProjectGallery.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { profile, projects, translations, formatExperienceText } from '../data/site';
+import { projects, translations, formatExperienceText } from '../data/site';
 
 const en = translations.en;
 ---
@@ -39,11 +39,11 @@ const en = translations.en;
 		<div class="capability-groups">
 			<section class="capability-group" aria-labelledby="technologies-title">
 				<h3 id="technologies-title" class="capability-label" data-i18n="home.technologiesLabel">{en.home.technologiesLabel}</h3>
-				<ul class="capability-list">{profile.technologies.map(skill => <li>{skill}</li>)}</ul>
+				<ul class="capability-list" data-i18n-list="home.technologyItems">{en.home.technologyItems.map(skill => <li data-list-item>{skill}</li>)}</ul>
 			</section>
 			<section class="capability-group" aria-labelledby="industries-title">
 				<h3 id="industries-title" class="capability-label" data-i18n="home.industriesLabel">{en.home.industriesLabel}</h3>
-				<ul class="capability-list">{profile.industries.map(skill => <li>{skill}</li>)}</ul>
+				<ul class="capability-list" data-i18n-list="home.industryItems">{en.home.industryItems.map(skill => <li data-list-item>{skill}</li>)}</ul>
 			</section>
 		</div>
 	</section>
@@ -62,12 +62,12 @@ const en = translations.en;
  const copy = en.home.projects[index];
  return <article class="project-card" aria-labelledby={`project-${project.id}`}>
  <div class="project-copy">
- <div class="project-topline"><span class="project-number">{project.number}</span><span class="project-status" data-i18n={`home.projects.${index}.status`}>{copy.status}</span></div>
+ <div class="project-topline"><span class="project-number">{project.number}</span><span class="project-status" data-status={project.status} data-i18n={`home.projects.${index}.status`}>{copy.status}</span></div>
  <h3 id={`project-${project.id}`} data-i18n={`home.projects.${index}.title`}>{copy.title}</h3>
  <p data-i18n={`home.projects.${index}.body`}>{copy.body}</p>
  <ul class="project-features" data-i18n-list={`home.projects.${index}.features`}>{copy.features.map(feature => <li data-list-item>{feature}</li>)}</ul>
  <p class="project-meta" data-i18n={`home.projects.${index}.meta`}>{copy.meta}</p>
- {project.video && <a class="project-link" href={project.video} target="_blank" rel="noopener noreferrer">
+ {project.video && <a class="button-link project-link" href={project.video} target="_blank" rel="noopener noreferrer">
  <span data-i18n={`home.projects.${index}.cta`}>{copy.cta}</span>
  <svg class="project-link-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
  </a>}

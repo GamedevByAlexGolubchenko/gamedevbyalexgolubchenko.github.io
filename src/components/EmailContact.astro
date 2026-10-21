@@ -34,7 +34,7 @@ const copy = translations.en.support;
 			} catch {
 				key = 'copyEmailError';
 			} finally {
-				const locale = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+				const locale = Object.hasOwn(translations, document.documentElement.lang) ? document.documentElement.lang as keyof typeof translations : 'en';
 				status.dataset.i18n = `support.${key}`;
 				status.textContent = translations[locale].support[key];
 				button.disabled = false;

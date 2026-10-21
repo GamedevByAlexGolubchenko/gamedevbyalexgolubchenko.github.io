@@ -1,7 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { translations, careerStart, type PageName } from '../data/site';
+import { translations, locales, type PageName } from '../data/site';
 import '../styles/global.css';
 import '../styles/theme.css';
 
@@ -19,12 +19,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <html lang="en" data-design="engine">
 	<head>
 		<meta charset="UTF-8" />
-		<script is:inline>
+		<script is:inline define:vars={{ supportedLocales: locales.map(locale => locale.code) }}>
 			(() => {
 				let locale = 'en';
-				try { locale = localStorage.getItem('alex-site-locale') === 'ru' ? 'ru' : 'en'; } catch {}
+				try { const saved = localStorage.getItem('alex-site-locale'); if (supportedLocales.includes(saved)) locale = saved; } catch {}
 				document.documentElement.lang = locale;
-				if (locale === 'ru') {
+				if (locale !== 'en') {
 					document.documentElement.setAttribute('data-locale-pending', '');
 					// Keep the page usable if localization unexpectedly fails.
 					window.setTimeout(() => document.documentElement.removeAttribute('data-locale-pending'), 1500);
@@ -56,21 +56,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		</div>
 
 		<script id="i18n-data" type="application/json" set:html={JSON.stringify(translations)}></script>
-		<script id="career-start" type="application/json" set:html={JSON.stringify(careerStart)}></script>
-		<script is:inline>
+
+		<script>
+			import { formatExperienceText, type Locale } from '../data/site';
 			const storageKey = 'alex-site-locale';
 			const dataNode = document.querySelector('#i18n-data');
 			const dictionaries = dataNode ? JSON.parse(dataNode.textContent || '{}') : {};
-			const careerStart = JSON.parse(document.querySelector('#career-start').textContent);
+
 			const getValue = (source, path) => {
 				const value = path.split('.').reduce((value, key) => value?.[key], source);
 				if (typeof value !== 'string' || !value.includes('{experienceYears}')) return value;
-				const now = new Date();
-				const years = Math.max(0, now.getFullYear() - careerStart.year - (now.getMonth() + 1 < careerStart.month ? 1 : 0));
-				const locale = document.documentElement.lang;
-				const category = new Intl.PluralRules(locale).select(years);
-				const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : (category === 'one' ? 'year' : 'years');
-				return value.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
+				return formatExperienceText(value, document.documentElement.lang as Locale);
 			};
 
 			const applyLocale = (locale, scope = document) => {
@@ -107,7 +103,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 				scope.querySelectorAll('[data-locale-option]').forEach((option) => {
 					option.classList.toggle('active', option.dataset.localeOption === locale);
+					option.setAttribute('aria-pressed', String(option.dataset.localeOption === locale));
 				});
+				const selectedOption = [...scope.querySelectorAll('[data-locale-option]')].find(option => option.dataset.localeOption === locale);
+				const currentLanguage = scope.querySelector('[data-current-language]');
+				if (currentLanguage && selectedOption) {
+					currentLanguage.textContent = selectedOption.querySelector('[data-language-name]').textContent;
+					currentLanguage.setAttribute('lang', locale);
+				}
+				const currentFlag = scope.querySelector('[data-current-flag]');
+				const selectedFlag = selectedOption?.querySelector('.language-flag');
+				if (currentFlag && selectedFlag) currentFlag.replaceChildren(selectedFlag.cloneNode(true));
 
 				const toggle = scope.querySelector('[data-language-toggle]');
 				if (toggle) {
@@ -120,14 +126,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				if (scope === document && typeof localizedTitle === 'string') document.title = localizedTitle;
 			};
 
-			const initialLocale = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+			const initialLocale = Object.hasOwn(dictionaries, document.documentElement.lang) ? document.documentElement.lang : 'en';
 			// Measure both translations off screen. Text gets room to wrap without
 			// moving the artwork, cards, or following sections when the locale changes.
-			const stableSelector = 'h1[data-i18n], h2[data-i18n], h3[data-i18n], p[data-i18n], .project-features li, .skills-list li, .hero-stack-description, .capability-label, .button-link, .project-link, .primary-nav a';
+			const stableSelector = '.hero-main, h1[data-i18n]:not(.hero-main *), h2[data-i18n], h3[data-i18n], p[data-i18n]:not(.hero-main *), .project-features li, .project-status, .skills-list li, .hero-stack-description, .capability-label, .button-link, .project-link, .primary-nav a';
 			const reserveTranslationSpace = () => {
 				const shell = document.querySelector('.page-shell');
 				const locale = document.documentElement.lang;
 				const targets = [...shell.querySelectorAll(stableSelector)];
+				// Center text inside the space measured for every translation.
+				// Lists and controls retain their own layout and alignment.
+				targets.forEach(element => {
+					if (element.matches('h1, h2, h3, p, .hero-stack-description')) {
+						element.classList.add('translation-space-centered');
+					}
+				});
 				const probe = shell.cloneNode(true);
 				probe.setAttribute('aria-hidden', 'true');
 				probe.inert = true;
@@ -136,6 +149,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				const samples = [...probe.querySelectorAll(stableSelector)];
 				samples.forEach(element => {
 					element.style.removeProperty('min-height');
+					element.style.removeProperty('--translation-min-height');
 					element.style.removeProperty('min-width');
 				});
 				document.body.append(probe);
@@ -155,7 +169,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					document.documentElement.lang = locale;
 				}
 				targets.forEach((element, index) => {
-					if (heights[index]) element.style.minHeight = `${Math.ceil(heights[index])}px`;
+					if (heights[index]) {
+						element.classList.add('translation-reserved');
+						element.style.setProperty('--translation-min-height', `${Math.ceil(heights[index])}px`);
+					}
 					if (widths[index]) element.style.minWidth = `${Math.ceil(widths[index])}px`;
 				});
 			};
@@ -163,14 +180,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			applyLocale(initialLocale);
 			document.documentElement.removeAttribute('data-locale-pending');
 			let translationFrame;
-			let translationWidth = document.documentElement.clientWidth;
-			window.addEventListener('resize', () => {
-				const width = document.documentElement.clientWidth;
+			const translationShell = document.querySelector('.page-shell');
+			let translationWidth = translationShell.getBoundingClientRect().width;
+			new ResizeObserver(() => {
+				const width = translationShell.getBoundingClientRect().width;
 				if (width === translationWidth) return;
 				translationWidth = width;
 				cancelAnimationFrame(translationFrame);
 				translationFrame = requestAnimationFrame(reserveTranslationSpace);
-			}, { passive: true });
+			}).observe(translationShell);
 			document.fonts.ready.then(reserveTranslationSpace);
 
 			const workSection = document.querySelector('#work');
@@ -207,11 +225,29 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				new ResizeObserver(scheduleNavigationSync).observe(document.querySelector('main'));
 			}
 
-			document.querySelector('[data-language-toggle]')?.addEventListener('click', (event) => {
-				const button = event.currentTarget;
-				const nextLocale = button.dataset.locale === 'en' ? 'ru' : 'en';
-				applyLocale(nextLocale);
-				try { localStorage.setItem(storageKey, nextLocale); } catch {}
+			const languagePicker = document.querySelector('[data-language-picker]');
+			const closeLanguagePicker = (restoreFocus = false) => {
+				if (!languagePicker?.open) return;
+				languagePicker.open = false;
+				if (restoreFocus) languagePicker.querySelector('summary').focus();
+			};
+			languagePicker?.querySelectorAll('[data-locale-option]').forEach(option => {
+				option.addEventListener('click', () => {
+					const nextLocale = option.dataset.localeOption;
+					if (!Object.hasOwn(dictionaries, nextLocale)) return;
+					applyLocale(nextLocale);
+					try { localStorage.setItem(storageKey, nextLocale); } catch {}
+					closeLanguagePicker(true);
+				});
+			});
+			document.addEventListener('click', event => {
+				if (!languagePicker?.contains(event.target)) closeLanguagePicker();
+			});
+			document.addEventListener('keydown', event => {
+				if (event.key === 'Escape') closeLanguagePicker(true);
+			});
+			languagePicker?.addEventListener('focusout', event => {
+				if (!languagePicker.contains(event.relatedTarget)) closeLanguagePicker();
 			});
 		</script>
 	</body>

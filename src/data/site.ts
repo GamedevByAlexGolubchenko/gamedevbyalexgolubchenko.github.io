@@ -1,3 +1,14 @@
+import { ptBR } from './pt-BR';
+import { es } from './es';
+
+export const locales = [
+ { code: 'en', label: 'English', flag: 'us' },
+ { code: 'ru', label: 'Русский', flag: 'ru' },
+ { code: 'pt-BR', label: 'Português', flag: 'br' },
+ { code: 'es', label: 'Español', flag: 'es' },
+] as const;
+export type Locale = typeof locales[number]['code'];
+
 export type PageName = 'home' | 'support';
 
 // The exact start day is unknown; count completed years from November 2020.
@@ -6,10 +17,10 @@ export function getExperienceYears(date = new Date()) {
 	return Math.max(0, date.getFullYear() - careerStart.year - (date.getMonth() + 1 < careerStart.month ? 1 : 0));
 }
 
-export function formatExperienceText(text: string, locale: 'en' | 'ru', date = new Date()) {
+export function formatExperienceText(text: string, locale: Locale, date = new Date()) {
 	const years = getExperienceYears(date);
 	const category = new Intl.PluralRules(locale).select(years);
-	const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : (category === 'one' ? 'year' : 'years');
+	const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : locale === 'pt-BR' ? (category === 'one' ? 'ano' : 'anos') : locale === 'es' ? (category === 'one' ? 'año' : 'años') : (category === 'one' ? 'year' : 'years');
 	return text.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
 }
 
@@ -25,15 +36,15 @@ export const profile = {
 	industries: ['Fintech', 'Trading', 'Hospitality', 'Fiscal Solutions', 'Game Development'],
 } as const;
 
-export type Project = { id: string; number: string; cover: string; screenshots: { src: string; key: string }[]; video?: string };
+export type Project = { id: string; number: string; status: 'preparing' | 'project'; cover: string; screenshots: { src: string; key: string }[]; video?: string };
 export const projects: Project[] = [
- { id: 'lobby', number: '01', cover: '/images/projects/lobby-cover-v4.png', screenshots: [
+ { id: 'lobby', number: '01', status: 'preparing', cover: '/images/projects/lobby-cover-v4.png', screenshots: [
    { src: '/images/projects/lobby-asset-1.png', key: 'overview' },
    { src: '/images/projects/lobby-asset-2.png', key: 'creation' },
    { src: '/images/projects/lobby-asset-3.png', key: 'filtering' },
    { src: '/images/projects/lobby-asset-4.png', key: 'joining' },
  ], video: 'https://www.youtube.com/watch?v=eXjHYdSl-No' },
- { id: 'localization', number: '02', cover: '/images/projects/localization-cover-v4.png', screenshots: [
+ { id: 'localization', number: '02', status: 'project', cover: '/images/projects/localization-cover-v4.png', screenshots: [
    { src: '/images/projects/localization-input-1.png', key: 'localizedSettings' },
    { src: '/images/projects/localization-input-2.png', key: 'inputBindings' },
    { src: '/images/projects/localization-input-3.png', key: 'graphicsSettings' },
@@ -42,6 +53,8 @@ export const projects: Project[] = [
 ];
 
 export const translations = {
+ es,
+	'pt-BR': ptBR,
 	en: {
 		meta: {
 			homeTitle: 'Alex Golubchenko — Senior Software Engineer',
@@ -74,6 +87,8 @@ export const translations = {
 			aboutBody: 'I am a Senior Software Engineer with over {experienceYears} {experienceUnit} of experience building and maintaining business-critical backend systems across fintech, fiscal compliance, hospitality, and trading. My work includes distributed systems, microservices, event-driven architecture, database optimization, real-time systems, and reusable Unity software.',
 			skillsLabel: 'Core capabilities',
 			technologiesLabel: 'Technologies',
+			technologyItems: profile.technologies,
+			industryItems: profile.industries,
 			stackBackend: 'Backend systems',
 			stackLanguage: 'Application code',
 			stackUnity: 'Game development tools',
@@ -193,6 +208,8 @@ export const translations = {
 			aboutBody: 'Я Senior Software Engineer с опытом более {experienceYears} {experienceUnit} в разработке и поддержке критически важных backend-систем для финтеха, фискального соответствия, гостиничного бизнеса и трейдинга. Моя специализация включает распределённые системы, микросервисы, событийную архитектуру, оптимизацию баз данных, системы реального времени и многократно используемое ПО для Unity.',
 			skillsLabel: 'Основные компетенции',
 			technologiesLabel: 'Технологии',
+			technologyItems: profile.technologies,
+			industryItems: profile.industries,
 			stackBackend: 'Серверные системы',
 			stackLanguage: 'Прикладной код',
 			stackUnity: 'Инструменты для игр',
