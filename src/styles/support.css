@@ -1,0 +1,78 @@
+/* Support uses the home page's tokens, section columns, cards and buttons.
+   This file owns its layout; EmailContact owns every contact control. */
+.support-hero {
+ display: grid;
+ grid-template-columns: minmax(0, 1fr) minmax(300px, .55fr);
+ align-items: center;
+ gap: clamp(32px, 4vw, 64px);
+ padding-block: 64px;
+ border-bottom: 1px solid var(--line);
+}
+.support-hero-main { container-type: inline-size; }
+.support-hero .eyebrow { margin-bottom: 24px; }
+.support-hero h1 {
+ max-width: none;
+ margin: 0 0 24px;
+ font-size: var(--support-title-size, clamp(2.25rem, 5.5vw, 5rem));
+ font-weight: 500;
+ line-height: 1.1;
+ letter-spacing: -.04em;
+ white-space: nowrap;
+}
+.support-hero .hero-intro { max-width: 60ch; margin: 0; font-size: 1rem; }
+.support-aside {
+ display: grid;
+ gap: 20px;
+ padding-inline-start: 32px;
+ border-inline-start: 1px solid var(--line);
+}
+.support-aside .section-label { margin: 0; color: var(--muted); }
+.support-aside > p { margin: 0; color: var(--muted); font-size: .9375rem; }
+.support-section { padding-block: var(--section-spacing); }
+.support-section .section-heading > .section-label { margin: 0; }
+.support-section-body { display: grid; gap: 32px; }
+.support-section .section-title {
+ margin: 0;
+ font-size: clamp(2.5rem, 4vw, 4rem);
+ text-wrap: balance;
+}
+.support-section .section-copy { max-width: 60ch; margin: 0; }
+/* Translation space is reserved, but all text starts at the same top edge. */
+.support-hero .translation-space-centered,
+.support-section .translation-space-centered { align-items: flex-start; }
+.process-grid {
+ display: grid;
+ grid-template-columns: repeat(3, minmax(0, 1fr));
+ gap: 24px 16px;
+ counter-reset: process;
+}
+.process-item {
+ display: grid;
+ grid-template-rows: subgrid;
+ grid-row: span 3;
+ padding: 24px;
+ border: 1px solid var(--line);
+ border-radius: var(--card-radius);
+ background: var(--card-surface);
+ counter-increment: process;
+}
+.process-item::before {
+ content: "0" counter(process);
+ justify-self: start;
+ color: var(--rust);
+ font: 500 .875rem/1.5 var(--mono);
+}
+.process-item h3 { margin: 0; font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 500; line-height: 1.3; letter-spacing: -.025em; }
+.process-item p { margin: 0; color: var(--muted); font-size: .9375rem; }
+.support-scope { margin: 0; }
+@media (max-width: 1100px) {
+ .process-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 800px) {
+ .support-hero { grid-template-columns: minmax(0, 1fr); padding-block: 48px 32px; gap: 32px; }
+ .support-aside { gap: 16px; padding: 24px 0 0; border-inline-start: 0; border-top: 1px solid var(--line); }
+ .support-section-body { gap: 24px; }
+ .process-item { padding: var(--mobile-card-inset); }
+ .process-grid { row-gap: 16px; }
+ .support-contact { padding-bottom: 32px; }
+}

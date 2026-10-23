@@ -1,33 +1,133 @@
 ---
 import { translations } from '../data/site';
-interface Props { email: string; label: string; labelKey: string }
-const { email, label, labelKey } = Astro.props;
+interface Props { email: string; label: string; labelKey: string; layout?: 'default' | 'compact' }
+const { email, label, labelKey, layout = 'default' } = Astro.props;
 const copy = translations.en.support;
 ---
 
-<div class="email-contact" data-email-contact>
-	<p class="email-address">{email}</p>
+<div class:list={['email-contact', { 'email-contact-compact': layout === 'compact' }]} data-email-contact>
+	<p class="email-address">
+		{layout === 'compact' && <svg class="email-address-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m4 7 8 6 8-6" /></svg>}
+		<span>{email}</span>
+	</p>
 	<div class="action-row">
 		<a class="button-link" href={`mailto:${email}`} data-i18n={labelKey}>{label}</a>
+		<div class="copy-email-action">
 		<button class="button-link secondary copy-email" type="button" data-copy-email={email} hidden>
 			<span data-i18n="support.copyEmailCta">{copy.copyEmailCta}</span>
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
 		</button>
+	<p class="copy-email-status" role="status" aria-live="polite" aria-atomic="true">
+		<svg class="copy-status-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path class="copy-status-check" d="m8 12 3 3 5-6" /><path class="copy-status-error" d="M12 7v6m0 4h.01" /></svg>
+		<span data-copy-status-message></span>
+	</p>
+		</div>
 	</div>
-	<p class="copy-email-status" role="status" aria-live="polite"></p>
 </div>
+
+<style>
+	/* One visual contract for every email contact; parents only place the block. */
+	.email-contact {
+		display: grid;
+		gap: 16px;
+		min-width: 0;
+		max-width: 100%;
+	}
+	.email-contact .email-address {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 0;
+		color: var(--cyan);
+		font: 400 .875rem/1.6 var(--mono);
+		overflow-wrap: anywhere;
+		user-select: all;
+	}
+	.email-address-icon { flex: 0 0 18px; color: var(--muted); }
+	.email-address span { min-width: 0; }
+	.email-contact .action-row {
+		display: grid;
+		gap: 12px;
+		align-items: start;
+	}
+	.copy-email-action { display: grid; gap: 10px; min-width: 0; }
+	.email-contact .button-link {
+		width: auto;
+		min-width: 0;
+		min-height: 48px;
+		justify-content: center;
+		gap: 12px;
+	}
+	.email-contact .button-link svg { flex-shrink: 0; }
+	.copy-email { cursor: pointer; }
+	.copy-email::after { content: none; }
+	.copy-email:disabled { cursor: wait; opacity: .65; }
+	.email-contact .copy-email-status {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		min-height: 1.5rem;
+		margin: 0;
+		padding: 0;
+		color: var(--cyan);
+		font: 400 .8125rem/1.5 var(--sans);
+		opacity: 0;
+		transform: translateY(4px);
+		transition: opacity 200ms ease, transform 200ms ease;
+		contain: inline-size;
+	}
+	.email-contact .copy-email-status[data-visible="true"] { opacity: 1; transform: translateY(0); }
+	.copy-status-icon { width: 16px; height: 16px; flex: 0 0 16px; margin-top: 2px; }
+	.copy-status-error { display: none; }
+	.email-contact .copy-email-status[data-state="error"] { color: var(--rust); }
+	[data-state="error"] .copy-status-check { display: none; }
+	[data-state="error"] .copy-status-error { display: block; }
+	/* Layout variants change placement only; controls and feedback stay shared. */
+	.email-contact-compact {
+		width: fit-content;
+	}
+	.email-contact-compact .action-row { display: flex; flex-wrap: wrap; align-items: flex-start; }
+	.email-contact-compact .action-row > * { flex: 0 1 auto; max-width: 100%; }
+	@media (max-width: 800px) {
+		.email-contact { width: 100%; }
+		.email-contact .action-row {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			grid-auto-rows: 1fr;
+			align-items: stretch;
+		}
+		.copy-email-action { position: relative; gap: 0; }
+		.email-contact .copy-email-status {
+			position: absolute;
+			top: calc(100% + 8px);
+			inset-inline: 0;
+			min-height: 0;
+		}
+		/* Longer clipboard errors stay in flow so they can never overlap content. */
+		.email-contact .copy-email-status[data-state="error"][data-visible="true"] {
+			position: static;
+			margin-top: 8px;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.email-contact .copy-email-status { transition: none; transform: none; }
+	}
+</style>
 
 <script>
 	import { translations } from '../data/site';
 	document.querySelectorAll<HTMLElement>('[data-email-contact]').forEach(contact => {
 		const button = contact.querySelector<HTMLButtonElement>('[data-copy-email]');
 		const status = contact.querySelector<HTMLElement>('.copy-email-status');
-		if (!button || !status || !navigator.clipboard?.writeText) return;
+		const message = status?.querySelector<HTMLElement>('[data-copy-status-message]');
+		if (!button || !status || !message || !navigator.clipboard?.writeText) return;
 		button.hidden = false;
 		let resetTimer: ReturnType<typeof setTimeout>;
+		let clearTimer: ReturnType<typeof setTimeout>;
 		button.addEventListener('click', async () => {
 			button.disabled = true;
 			clearTimeout(resetTimer);
+			clearTimeout(clearTimer);
 			let key: 'copyEmailSuccess' | 'copyEmailError' = 'copyEmailSuccess';
 			try {
 				await navigator.clipboard.writeText(button.dataset.copyEmail!);
@@ -35,12 +135,22 @@ const copy = translations.en.support;
 				key = 'copyEmailError';
 			} finally {
 				const locale = Object.hasOwn(translations, document.documentElement.lang) ? document.documentElement.lang as keyof typeof translations : 'en';
-				status.dataset.i18n = `support.${key}`;
-				status.textContent = translations[locale].support[key];
+				message.dataset.i18n = `support.${key}`;
+				message.textContent = translations[locale].support[key];
+				status.dataset.state = key === 'copyEmailSuccess' ? 'success' : 'error';
+				status.dataset.visible = 'true';
+				// Replay the confirmation even when the address is copied again.
+				status.getAnimations().forEach(animation => animation.cancel());
+				if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+					status.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 220, easing: 'ease-out' });
+				}
 				button.disabled = false;
 				resetTimer = setTimeout(() => {
-					status.textContent = '';
-					delete status.dataset.i18n;
+					delete status.dataset.visible;
+					clearTimer = setTimeout(() => {
+						message.textContent = '';
+						delete message.dataset.i18n;
+					}, 250);
 				}, 5000);
 			}
 		});

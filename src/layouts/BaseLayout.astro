@@ -129,11 +129,38 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			const initialLocale = Object.hasOwn(dictionaries, document.documentElement.lang) ? document.documentElement.lang : 'en';
 			// Measure both translations off screen. Text gets room to wrap without
 			// moving the artwork, cards, or following sections when the locale changes.
-			const stableSelector = '.hero-main, h1[data-i18n]:not(.hero-main *), h2[data-i18n], h3[data-i18n], p[data-i18n]:not(.hero-main *), .project-features li, .project-status, .skills-list li, .hero-stack-description, .capability-label, .button-link, .project-link, .primary-nav a';
+			const stableSelector = '.hero-main, h1[data-i18n]:not(.hero-main *), h2[data-i18n], h3[data-i18n], p[data-i18n]:not(.hero-main *), .project-features li, .project-status, .skills-list li, .capability-list li, .hero-stack-description, .capability-label, .button-link, .project-link, .primary-nav a';
 			const reserveTranslationSpace = () => {
 				const shell = document.querySelector('.page-shell');
+				const supportTitle = shell.querySelector<HTMLElement>('.support-hero h1');
+				if (supportTitle) {
+					// Fit every translation to one shared type size at this container width.
+					supportTitle.style.removeProperty('--support-title-size');
+					const baseSize = parseFloat(getComputedStyle(supportTitle).fontSize);
+					const availableWidth = supportTitle.getBoundingClientRect().width;
+					const titleProbe = supportTitle.cloneNode(true) as HTMLElement;
+					titleProbe.removeAttribute('id');
+					titleProbe.setAttribute('aria-hidden', 'true');
+					titleProbe.style.cssText = `position: fixed; visibility: hidden; pointer-events: none; width: max-content; max-width: none; min-width: 0; font-size: ${baseSize}px;`;
+					supportTitle.parentElement.append(titleProbe);
+					let widestTitle = 0;
+					for (const dictionary of Object.values(dictionaries) as any[]) {
+						titleProbe.textContent = dictionary.support.title;
+						widestTitle = Math.max(widestTitle, titleProbe.getBoundingClientRect().width);
+					}
+					titleProbe.remove();
+					if (widestTitle > 0) supportTitle.style.setProperty('--support-title-size', `${baseSize * Math.min(1, availableWidth / widestTitle)}px`);
+				}
 				const locale = document.documentElement.lang;
-				const targets = [...shell.querySelectorAll(stableSelector)];
+				const compactMobile = window.matchMedia('(max-width: 800px)').matches;
+				const followsContent = element => compactMobile && element.matches('.experience-section :is(h2, p)[data-i18n], .home-support-callout :is(h2, p)[data-i18n], .projects-section :is(h2, h3, p)[data-i18n], .project-features li');
+				const candidates = [...shell.querySelectorAll<HTMLElement>(stableSelector)];
+				candidates.filter(followsContent).forEach(element => {
+					// Stacked mobile copy has no adjacent artwork or card to align with.
+					element.classList.remove('translation-reserved');
+					element.style.removeProperty('--translation-min-height');
+				});
+				const targets = candidates.filter(element => !followsContent(element));
 				// Center text inside the space measured for every translation.
 				// Lists and controls retain their own layout and alignment.
 				targets.forEach(element => {
@@ -146,7 +173,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				probe.inert = true;
 				probe.classList.add('translation-measure');
 				probe.style.width = `${shell.getBoundingClientRect().width}px`;
-				const samples = [...probe.querySelectorAll(stableSelector)];
+				const samples = [...probe.querySelectorAll(stableSelector)].filter(element => !followsContent(element));
 				samples.forEach(element => {
 					element.style.removeProperty('min-height');
 					element.style.removeProperty('--translation-min-height');
@@ -168,6 +195,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					probe.remove();
 					document.documentElement.lang = locale;
 				}
+				// Collections share their tallest translated item, rather than letting
+				// one long label enlarge only its own row or its own capability panel.
+				const targetIndexes = new Map(targets.map((element, index) => [element, index]));
+				const equalizeCollection = (root: Element, selector: string) => {
+					const indexes = [...root.querySelectorAll(selector)]
+						.map(element => targetIndexes.get(element)).filter((index): index is number => index !== undefined);
+					const height = Math.max(0, ...indexes.map(index => heights[index]));
+					indexes.forEach(index => { heights[index] = height; });
+				};
+				shell.querySelectorAll('.capability-groups').forEach(group => {
+					equalizeCollection(group, '.capability-list li');
+					equalizeCollection(group, '.capability-label');
+				});
+				shell.querySelectorAll('.skills-list').forEach(list => equalizeCollection(list, 'li'));
+				shell.querySelectorAll('.hero-stack').forEach(list => equalizeCollection(list, '.hero-stack-description'));
 				targets.forEach((element, index) => {
 					if (heights[index]) {
 						element.classList.add('translation-reserved');

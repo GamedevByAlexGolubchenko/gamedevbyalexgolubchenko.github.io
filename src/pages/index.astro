@@ -7,10 +7,10 @@ const en = translations.en;
 ---
 
 <BaseLayout page="home" title={en.meta.homeTitle} description={en.meta.homeDescription}>
-	<section class="hero">
+	<section class="hero" aria-labelledby="home-title">
 		<div class="hero-main">
 			<p class="eyebrow" data-i18n="home.eyebrow">{en.home.eyebrow}</p>
-			<h1 data-i18n="home.title">{en.home.title}</h1>
+			<h1 id="home-title" data-i18n="home.title">{en.home.title}</h1>
 			<p class="hero-intro" data-i18n="home.intro">{en.home.intro}</p>
 			<div class="action-row">
 				<a class="button-link" href="#work" data-i18n="home.primaryCta">{en.home.primaryCta}</a>
@@ -48,7 +48,7 @@ const en = translations.en;
 		</div>
 	</section>
 
-	<section class="content-section" id="work" aria-labelledby="work-title">
+	<section class="content-section projects-section" id="work" aria-labelledby="work-title">
 		<div class="section-heading">
 			<p class="section-label" data-i18n="home.workLabel">{en.home.workLabel}</p>
 			<div>
