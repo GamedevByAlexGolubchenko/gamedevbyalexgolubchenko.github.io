@@ -139,8 +139,8 @@ html[data-design="engine"] .hero h1 {
  letter-spacing: -.045em;
 }
 html[data-design="engine"] .hero .hero-intro { max-width: 60ch; font-size: 1rem; }
-html[data-design="engine"] .eyebrow { color: var(--muted); letter-spacing: .08em; }
-html[data-design="engine"] .eyebrow::before { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: var(--rust); transform: translateY(-1px); }
+html[data-design="engine"] .eyebrow { display: flex; align-items: flex-start; color: var(--muted); letter-spacing: .08em; }
+html[data-design="engine"] .eyebrow::before { width: 8px; height: 8px; flex: 0 0 8px; margin-block-start: calc((1lh - 8px) / 2); border-radius: 50%; background: var(--rust); }
 html[data-design="engine"] .hero-intro { font-size: clamp(1rem, 1.5vw, 1.1875rem); line-height: 1.8; }
 html[data-design="engine"] .hero-index {
  display: block;
@@ -388,7 +388,7 @@ html[data-design="engine"] :is(.gallery-controls button, .gallery-lightbox butto
 html[data-design="engine"] .footer-links a:active { color: var(--rust); }
 html[data-design="engine"] .footer-name { color: var(--ink); text-transform: none; }
 @media (max-width: 800px) {
- html[data-design="engine"] { --mobile-inset: clamp(16px, 3vw, 24px); --mobile-card-inset: clamp(16px, 3vw, 24px); --section-spacing: 48px; }
+ html[data-design="engine"] { --mobile-inset: clamp(16px, 3vw, 24px); --mobile-card-inset: clamp(16px, 3vw, 24px); --section-spacing: 48px; --mobile-hero-title-size: clamp(2.25rem, 6vw, 3.5rem); }
  html[data-design="engine"] .page-shell { width: calc(100% - 2 * var(--mobile-inset)); }
  html[data-design="engine"] .section-heading { gap: 12px; }
  html[data-design="engine"] .section-heading > .section-label { margin-bottom: 0; }
@@ -409,7 +409,7 @@ html[data-design="engine"] .footer-name { color: var(--ink); text-transform: non
  html[data-design="engine"] .hero-main { min-height: 0; justify-content: flex-start; }
  html[data-design="engine"] .hero-index { padding: 24px 0 0; border-inline-start: 0; border-top: 1px solid var(--line); }
  html[data-design="engine"] #main::before { width: 40%; opacity: .16; }
- html[data-design="engine"] .hero h1 { font-size: clamp(2.25rem, 6vw, 3.5rem); }
+ html[data-design="engine"] .hero h1 { font-size: var(--mobile-hero-title-size); }
  html[data-design="engine"] .primary-nav {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -133,7 +133,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			const reserveTranslationSpace = () => {
 				const shell = document.querySelector('.page-shell');
 				const supportTitle = shell.querySelector<HTMLElement>('.support-hero h1');
-				if (supportTitle) {
+				if (supportTitle && window.matchMedia('(min-width: 801px)').matches) {
 					// Fit every translation to one shared type size at this container width.
 					supportTitle.style.removeProperty('--support-title-size');
 					const baseSize = parseFloat(getComputedStyle(supportTitle).fontSize);
@@ -150,10 +150,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					}
 					titleProbe.remove();
 					if (widestTitle > 0) supportTitle.style.setProperty('--support-title-size', `${baseSize * Math.min(1, availableWidth / widestTitle)}px`);
+				} else {
+					supportTitle?.style.removeProperty('--support-title-size');
 				}
 				const locale = document.documentElement.lang;
 				const compactMobile = window.matchMedia('(max-width: 800px)').matches;
-				const followsContent = element => compactMobile && element.matches('.experience-section :is(h2, p)[data-i18n], .home-support-callout :is(h2, p)[data-i18n], .projects-section :is(h2, h3, p)[data-i18n], .project-features li');
+				const followsContent = element => compactMobile && element.matches('.experience-section :is(h2, p)[data-i18n], .home-support-callout :is(h2, p)[data-i18n], .projects-section :is(h2, h3, p)[data-i18n], .project-features li, .support-hero-main :is(h1, p)[data-i18n]');
 				const candidates = [...shell.querySelectorAll<HTMLElement>(stableSelector)];
 				candidates.filter(followsContent).forEach(element => {
 					// Stacked mobile copy has no adjacent artwork or card to align with.
