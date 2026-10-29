@@ -12,4 +12,3 @@ export function formatExperienceText(text: string, locale: Locale, date = new Da
 	const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : locale === 'pt-BR' ? (category === 'one' ? 'ano' : 'anos') : locale === 'es' ? (category === 'one' ? 'año' : 'años') : (category === 'one' ? 'year' : 'years');
 	return text.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
 }
-
