@@ -1,4 +1,5 @@
 ---
+import { localeFromPath, pagePath } from '../data/routing';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { translations, locales, type PageName } from '../data/site';
@@ -12,39 +13,28 @@ interface Props {
 }
 
 const { page, title, description } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en" data-design="engine">
+<html lang={locale} data-design="engine">
 	<head>
 		<meta charset="UTF-8" />
-		<script is:inline define:vars={{ supportedLocales: locales.map(locale => locale.code) }}>
-			(() => {
-				let locale = 'en';
-				try { const saved = localStorage.getItem('alex-site-locale'); if (supportedLocales.includes(saved)) locale = saved; } catch {}
-				document.documentElement.lang = locale;
-				if (locale !== 'en') {
-					document.documentElement.setAttribute('data-locale-pending', '');
-					// Keep the page usable if localization unexpectedly fails.
-					window.setTimeout(() => document.documentElement.removeAttribute('data-locale-pending'), 1500);
-				}
-			})();
-		</script>
-		<style is:global>
-			html[data-locale-pending] body { visibility: hidden; }
-		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#0B1020" />
 		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
 		<link rel="canonical" href={canonicalURL} />
+        {locales.map(language => <link rel="alternate" hreflang={language.code} href={new URL(pagePath(language.code, page), Astro.site)} />)}
+        <link rel="alternate" hreflang="x-default" href={new URL(pagePath('en', page), Astro.site)} />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 		<link rel="preload" href="/fonts/inter/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:title" content={title} data-i18n-content={`meta.${page}Title`} />
 		<meta property="og:description" content={description} data-i18n-content={`meta.${page}Description`} />
-		<meta property="og:site_name" content={translations.en.common.name} data-i18n-content="common.name" />
+		<meta property="og:site_name" content={translations[locale].common.name} data-i18n-content="common.name" />
 		<meta name="twitter:card" content="summary" />
 		<title data-i18n={`meta.${page}Title`}>{title}</title>
 	</head>
@@ -59,7 +49,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		<script>
 			import { formatExperienceText, type Locale } from '../data/site';
-			const storageKey = 'alex-site-locale';
 			const dataNode = document.querySelector('#i18n-data');
 			const dictionaries = dataNode ? JSON.parse(dataNode.textContent || '{}') : {};
 
@@ -103,7 +92,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 				scope.querySelectorAll('[data-locale-option]').forEach((option) => {
 					option.classList.toggle('active', option.dataset.localeOption === locale);
-					option.setAttribute('aria-pressed', String(option.dataset.localeOption === locale));
+					if (option.dataset.localeOption === locale) option.setAttribute('aria-current', 'true');
+                    else option.removeAttribute('aria-current');
 				});
 				const selectedOption = [...scope.querySelectorAll('[data-locale-option]')].find(option => option.dataset.localeOption === locale);
 				const currentLanguage = scope.querySelector('[data-current-language]');
@@ -275,15 +265,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				languagePicker.open = false;
 				if (restoreFocus) languagePicker.querySelector('summary').focus();
 			};
-			languagePicker?.querySelectorAll('[data-locale-option]').forEach(option => {
-				option.addEventListener('click', () => {
-					const nextLocale = option.dataset.localeOption;
-					if (!Object.hasOwn(dictionaries, nextLocale)) return;
-					applyLocale(nextLocale);
-					try { localStorage.setItem(storageKey, nextLocale); } catch {}
-					closeLanguagePicker(true);
-				});
-			});
 			document.addEventListener('click', event => {
 				if (!languagePicker?.contains(event.target)) closeLanguagePicker();
 			});

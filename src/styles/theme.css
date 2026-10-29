@@ -74,6 +74,7 @@ html[data-design="engine"] .language-options {
  box-shadow: 0 16px 40px color-mix(in srgb, var(--paper) 70%, transparent);
 }
 html[data-design="engine"] .language-option {
+ text-decoration: none;
  display: grid;
  grid-template-columns: 24px minmax(0, 1fr) 16px;
  align-items: center;
@@ -91,8 +92,8 @@ html[data-design="engine"] .language-option {
 }
 html[data-design="engine"] .language-flag { border-radius: 3px; }
 html[data-design="engine"] .language-check { visibility: hidden; color: var(--rust); }
-html[data-design="engine"] .language-option[aria-pressed="true"] { background: var(--accent-tint); border-color: var(--accent-border); }
-html[data-design="engine"] .language-option[aria-pressed="true"] .language-check { visibility: visible; }
+html[data-design="engine"] .language-option[aria-current="true"] { background: var(--accent-tint); border-color: var(--accent-border); }
+html[data-design="engine"] .language-option[aria-current="true"] .language-check { visibility: visible; }
 @media (hover: hover) and (pointer: fine) {
  html[data-design="engine"] :is(.language-toggle, .language-option):hover { background: var(--card-surface); border-color: var(--muted); }
 }

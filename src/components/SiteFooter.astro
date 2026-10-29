@@ -1,11 +1,14 @@
 ---
-import { profile } from '../data/site';
+import { localeFromPath } from '../data/routing';
+const locale = localeFromPath(Astro.url.pathname);
+const dictionary = translations[locale];
+import { profile, translations } from '../data/site';
 ---
 
 <footer class="site-footer">
 	<div>
-		<p class="footer-name" data-i18n="common.name">{profile.name}</p>
-		<p class="footer-line" data-i18n="common.footerLine">Unity development, engineered with care.</p>
+		<p class="footer-name" data-i18n="common.name">{dictionary.common.name}</p>
+		<p class="footer-line" data-i18n="common.footerLine">{dictionary.common.footerLine}</p>
 	</div>
 	<div class="footer-meta">
 		<div class="footer-links">
@@ -13,7 +16,7 @@ import { profile } from '../data/site';
 			<a href={profile.youtube} target="_blank" rel="noreferrer" data-i18n="common.youtube">YouTube</a>
 			<a href={profile.instagram} target="_blank" rel="noreferrer" data-i18n="common.instagram">Instagram</a>
 		</div>
-		<p>© <span data-current-year>{new Date().getFullYear()}</span> <span data-i18n="common.copyright">{profile.name}</span></p>
+		<p>© <span data-current-year>{new Date().getFullYear()}</span> <span data-i18n="common.copyright">{dictionary.common.name}</span></p>
 	</div>
 </footer>
 

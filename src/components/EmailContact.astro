@@ -1,8 +1,11 @@
 ---
+import { localeFromPath } from '../data/routing';
+const locale = localeFromPath(Astro.url.pathname);
+const dictionary = translations[locale];
 import { translations } from '../data/site';
 interface Props { email: string; label: string; labelKey: string; layout?: 'default' | 'compact' }
 const { email, label, labelKey, layout = 'default' } = Astro.props;
-const copy = translations.en.support;
+const copy = dictionary.support;
 ---
 
 <div class:list={['email-contact', { 'email-contact-compact': layout === 'compact' }]} data-email-contact>
