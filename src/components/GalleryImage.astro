@@ -1,0 +1,26 @@
+---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props { src: ImageMetadata; alt: string; altKey: string; deferred?: boolean }
+const { src, alt, altKey, deferred = false } = Astro.props;
+const widths = [...new Set([400, 800, 1280, src.width].filter(width => width <= src.width))];
+const images = await Promise.all(widths.map(width => getImage({ src, width, format: 'webp', quality: 85 })));
+const srcset = images.map((image, index) => `${image.src} ${widths[index]}w`).join(', ');
+const fallback = images[Math.min(1, images.length - 1)].src;
+const sizes = '(max-width: 800px) calc(100vw - 44px), (max-width: 1272px) 55vw, 644px';
+---
+<img
+	src={deferred ? undefined : fallback}
+	srcset={deferred ? undefined : srcset}
+	data-image-src={deferred ? fallback : undefined}
+	data-image-srcset={deferred ? srcset : undefined}
+	data-full-src={src.src}
+	sizes={sizes}
+	width={src.width}
+	height={src.height}
+	alt={alt}
+	data-i18n-alt={altKey}
+	loading="lazy"
+	decoding="async"
+/>

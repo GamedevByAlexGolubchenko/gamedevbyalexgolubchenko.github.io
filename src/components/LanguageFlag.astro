@@ -1,0 +1,10 @@
+---
+interface Props { flag: 'us' | 'ru' | 'br' | 'es' }
+const { flag } = Astro.props;
+---
+<svg class="language-flag" width="24" height="16" viewBox="0 0 30 20" aria-hidden="true">
+					{flag === 'ru' && <><path fill="#fff" d="M0 0h30v20H0z"/><path fill="#2246a0" d="M0 6.67h30v6.66H0z"/><path fill="#cf343a" d="M0 13.33h30V20H0z"/></>}
+					{flag === 'br' && <><path fill="#229e45" d="M0 0h30v20H0z"/><path fill="#ffdf40" d="m15 2 13 8-13 8L2 10z"/><circle fill="#24448c" cx="15" cy="10" r="5"/><path d="M10.5 8.5q5 0 9 4" stroke="#fff" stroke-width="1" fill="none"/></>}
+					{flag === 'es' && <><path fill="#b92535" d="M0 0h30v20H0z"/><path fill="#f5c844" d="M0 5h30v10H0z"/><path fill="#b92535" d="M8 8h3v5H8z"/></>}
+					{flag === 'us' && <><path fill="#fff" d="M0 0h30v20H0z"/><path stroke="#bd3546" stroke-width="1.54" d="M0 .77h30M0 3.85h30M0 6.92h30M0 10h30M0 13.08h30M0 16.15h30M0 19.23h30"/><path fill="#294577" d="M0 0h13v10.77H0z"/><path fill="#fff" d="M2 2h1v1H2zm4 0h1v1H6zm4 0h1v1h-1zM4 5h1v1H4zm4 0h1v1H8zM2 8h1v1H2zm4 0h1v1H6zm4 0h1v1h-1z"/></>}
+				</svg>

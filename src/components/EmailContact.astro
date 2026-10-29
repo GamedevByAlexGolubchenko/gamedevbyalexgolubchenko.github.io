@@ -118,7 +118,7 @@ const copy = dictionary.support;
 </style>
 
 <script>
-	import { translations } from '../data/site';
+	const translations = JSON.parse(document.querySelector('#i18n-data')?.textContent || '{}');
 	document.querySelectorAll<HTMLElement>('[data-email-contact]').forEach(contact => {
 		const button = contact.querySelector<HTMLButtonElement>('[data-copy-email]');
 		const status = contact.querySelector<HTMLElement>('.copy-email-status');

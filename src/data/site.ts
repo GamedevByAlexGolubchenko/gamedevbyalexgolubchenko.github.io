@@ -1,3 +1,14 @@
+import type { ImageMetadata } from 'astro';
+import projectImage0 from '../assets/projects/lobby-cover-v4.png';
+import projectImage1 from '../assets/projects/lobby-asset-1.png';
+import projectImage2 from '../assets/projects/lobby-asset-2.png';
+import projectImage3 from '../assets/projects/lobby-asset-3.png';
+import projectImage4 from '../assets/projects/lobby-asset-4.png';
+import projectImage5 from '../assets/projects/localization-cover-v4.png';
+import projectImage6 from '../assets/projects/localization-input-1.png';
+import projectImage7 from '../assets/projects/localization-input-2.png';
+import projectImage8 from '../assets/projects/localization-input-3.png';
+import projectImage9 from '../assets/projects/localization-input-4.png';
 import { ptBR } from './pt-BR';
 import { es } from './es';
 
@@ -11,18 +22,7 @@ export type Locale = typeof locales[number]['code'];
 
 export type PageName = 'home' | 'support';
 
-// The exact start day is unknown; count completed years from November 2020.
-export const careerStart = { year: 2020, month: 11 } as const;
-export function getExperienceYears(date = new Date()) {
-	return Math.max(0, date.getFullYear() - careerStart.year - (date.getMonth() + 1 < careerStart.month ? 1 : 0));
-}
-
-export function formatExperienceText(text: string, locale: Locale, date = new Date()) {
-	const years = getExperienceYears(date);
-	const category = new Intl.PluralRules(locale).select(years);
-	const unit = locale === 'ru' ? (category === 'one' ? 'года' : 'лет') : locale === 'pt-BR' ? (category === 'one' ? 'ano' : 'anos') : locale === 'es' ? (category === 'one' ? 'año' : 'años') : (category === 'one' ? 'year' : 'years');
-	return text.replaceAll('{experienceYears}', String(years)).replaceAll('{experienceUnit}', unit);
-}
+export { careerStart, getExperienceYears, formatExperienceText } from './experience';
 
 export const profile = {
 	name: 'Alex Golubchenko',
@@ -36,19 +36,19 @@ export const profile = {
 	industries: ['Fintech', 'Trading', 'Hospitality', 'Fiscal Solutions', 'Game Development'],
 } as const;
 
-export type Project = { id: string; number: string; status: 'preparing' | 'project'; cover: string; screenshots: { src: string; key: string }[]; video?: string };
+export type Project = { id: string; number: string; status: 'preparing' | 'project'; cover: ImageMetadata; screenshots: { src: ImageMetadata; key: string }[]; video?: string };
 export const projects: Project[] = [
- { id: 'lobby', number: '01', status: 'preparing', cover: '/images/projects/lobby-cover-v4.png', screenshots: [
-   { src: '/images/projects/lobby-asset-1.png', key: 'overview' },
-   { src: '/images/projects/lobby-asset-2.png', key: 'creation' },
-   { src: '/images/projects/lobby-asset-3.png', key: 'filtering' },
-   { src: '/images/projects/lobby-asset-4.png', key: 'joining' },
+ { id: 'lobby', number: '01', status: 'preparing', cover: projectImage0, screenshots: [
+   { src: projectImage1, key: 'overview' },
+   { src: projectImage2, key: 'creation' },
+   { src: projectImage3, key: 'filtering' },
+   { src: projectImage4, key: 'joining' },
  ], video: 'https://www.youtube.com/watch?v=eXjHYdSl-No' },
- { id: 'localization', number: '02', status: 'project', cover: '/images/projects/localization-cover-v4.png', screenshots: [
-   { src: '/images/projects/localization-input-1.png', key: 'localizedSettings' },
-   { src: '/images/projects/localization-input-2.png', key: 'inputBindings' },
-   { src: '/images/projects/localization-input-3.png', key: 'graphicsSettings' },
-   { src: '/images/projects/localization-input-4.png', key: 'audioSettings' },
+ { id: 'localization', number: '02', status: 'project', cover: projectImage5, screenshots: [
+   { src: projectImage6, key: 'localizedSettings' },
+   { src: projectImage7, key: 'inputBindings' },
+   { src: projectImage8, key: 'graphicsSettings' },
+   { src: projectImage9, key: 'audioSettings' },
  ] },
 ];
 

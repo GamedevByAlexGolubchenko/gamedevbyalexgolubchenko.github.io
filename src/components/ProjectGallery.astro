@@ -1,5 +1,6 @@
 ---
 import { localeFromPath } from '../data/routing';
+import GalleryImage from './GalleryImage.astro';
 const locale = localeFromPath(Astro.url.pathname);
 const dictionary = translations[locale];
 import { translations, type Project } from '../data/site';
@@ -11,10 +12,10 @@ const prefix = `home.projects.${index}`;
 <section class="project-gallery" data-gallery aria-label={dictionary.gallery.label} data-i18n-aria="gallery.label">
  <div class="gallery-frame">
   <div class="gallery-slide gallery-cover" data-slide>
-   <img src={project.cover} alt={copy.coverAlt} data-i18n-alt={`${prefix}.coverAlt`} width="1672" height="941" loading="lazy" />
+   <GalleryImage src={project.cover} alt={copy.coverAlt} altKey={`${prefix}.coverAlt`} />
   </div>
   {project.screenshots.map((shot) => <figure class="gallery-slide" data-slide hidden>
-   <img src={shot.src} alt={copy[`${shot.key}Alt`]} data-i18n-alt={`${prefix}.${shot.key}Alt`} loading="lazy" />
+   <GalleryImage src={shot.src} alt={copy[`${shot.key}Alt`]} altKey={`${prefix}.${shot.key}Alt`} deferred />
   </figure>)}
  </div>
  <div class="gallery-caption-row">
@@ -52,15 +53,26 @@ const prefix = `home.projects.${index}`;
   const opener = gallery.querySelector<HTMLButtonElement>('[data-open]')!;
   let current = 0;
   if (controls) controls.hidden = false;
+  const loadSlide = () => {
+   const image = slides[current].querySelector('img')!;
+   if (image.dataset.imageSrcset) {
+    image.srcset = image.dataset.imageSrcset;
+    image.src = image.dataset.imageSrc!;
+    delete image.dataset.imageSrcset;
+    delete image.dataset.imageSrc;
+   }
+   return image;
+  };
   const syncFull = () => {
    const image = slides[current].querySelector('img')!;
-   fullImage.src = image.src;
+   fullImage.src = image.dataset.fullSrc!;
    fullImage.alt = image.alt;
    gallery.querySelector('[data-full-caption]')!.textContent = captions[current].textContent;
    gallery.querySelector('[data-full-position]')!.textContent = `${current + 1} / ${slides.length}`;
   };
   const move = (direction: number) => {
    current = (current + direction + slides.length) % slides.length;
+   loadSlide();
    slides.forEach((slide, i) => { slide.hidden = i !== current; });
    captions.forEach((caption, i) => { caption.hidden = i !== current; });
    const position = gallery.querySelector('[data-position]');
