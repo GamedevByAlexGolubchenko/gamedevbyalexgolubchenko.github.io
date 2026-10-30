@@ -21,6 +21,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <html lang={locale} data-design="engine">
 	<head>
 		<meta charset="UTF-8" />
+		{import.meta.env.PROD && (
+			<>
+				<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-4VE01XSTT8"></script>
+				<script is:inline>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-4VE01XSTT8');
+				</script>
+			</>
+		)}
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#0B1020" />
 		<meta name="description" content={description} data-i18n-content={`meta.${page}Description`} />
